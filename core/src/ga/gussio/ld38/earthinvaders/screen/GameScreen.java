@@ -33,7 +33,7 @@ public class GameScreen extends Screen{
         camera.position.set(Game.WIDTH/2, Game.HEIGHT/2, 0);
         camera.update();
         earthTexture = new Sprite(new Texture(Gdx.files.internal("world.png")));
-        earth = new Circle((float) (Game.WIDTH/2-Game.HEIGHT*0.2), (float) (Game.HEIGHT/2-Game.HEIGHT*0.2), (float) (Game.HEIGHT*0.2)); //shaperenderer werkt hier anders, rendert vanuit het midden, dus radius niet van x/y afhalen.
+        earth = new Circle((float) (Game.WIDTH/2-Game.HEIGHT*0.2), (float) (Game.HEIGHT/2-Game.HEIGHT*0.2), (float) (Game.HEIGHT*0.2));
         entities.add(new Player());
         entities.add(new Meteorite());
     }
