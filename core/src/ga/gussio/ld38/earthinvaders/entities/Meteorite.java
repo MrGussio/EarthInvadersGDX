@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.util.Random;
 
 import ga.gussio.ld38.earthinvaders.Game;
+import ga.gussio.ld38.earthinvaders.entities.particles.Explosion;
 import ga.gussio.ld38.earthinvaders.math.Circle;
 import ga.gussio.ld38.earthinvaders.screen.GameScreen;
 
@@ -85,7 +86,7 @@ public class Meteorite extends Entity {
     }
 
     public void destroy(){
-//        GameScreen.entities.add(new Explosion((int) collision.getXCenter(), (int) collision.getYCenter()));
+        GameScreen.entities.add(new Explosion((int) collision.getXCenter(), (int) collision.getYCenter()));
         GameScreen.entities.remove(this);
     }
 }
