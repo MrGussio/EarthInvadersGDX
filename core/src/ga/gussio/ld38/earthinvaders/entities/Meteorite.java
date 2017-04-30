@@ -13,7 +13,7 @@ import ga.gussio.ld38.earthinvaders.screen.GameScreen;
 
 public class Meteorite extends Entity {
 
-    private int radius = 25;
+    private int radius = 50;
     private int speed = 3;
     private double velX, velY;
     private double health;
@@ -49,7 +49,7 @@ public class Meteorite extends Entity {
 
         velX = xSpeed;
         velY = ySpeed;
-        this.collision = new Circle(x, y, radius);
+        this.collision = new Circle(x-radius, y-radius, radius);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class Meteorite extends Entity {
         sr.begin();
         sr.setColor(Color.YELLOW);
 //        sr.rotate(Math.toRadians(rotation), collision.getXCenter(), collision.getYCenter());
-        sr.circle(x, y, collision.getRadius()*2);
+        sr.circle(collision.getXCenter(), collision.getYCenter(), collision.getRadius());
 //        sr.rotate(-Math.toRadians(rotation), collision.getXCenter(), collision.getYCenter());
         sr.end();
     }

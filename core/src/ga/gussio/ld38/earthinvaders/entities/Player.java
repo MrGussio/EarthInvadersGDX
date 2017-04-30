@@ -21,8 +21,8 @@ public class Player extends Entity {
 
     public Player() {
         super(0, 0);
-        this.x = (float) (GameScreen.earth.getX() + radius*Math.sin(angle));
-        this.y = (float) (GameScreen.earth.getY() + radius*Math.cos(angle));
+        this.x = (float) (GameScreen.earth.getXCenter() + radius*Math.sin(angle));
+        this.y = (float) (GameScreen.earth.getYCenter() + radius*Math.cos(angle));
     }
 
     @Override
@@ -38,8 +38,8 @@ public class Player extends Entity {
     @Override
     public void tick() {
         angle += Math.toRadians(1);
-        x = (int)(GameScreen.earth.getX() + radius*Math.sin(angle));
-        y = (int)(GameScreen.earth.getY() + radius*Math.cos(angle));
+        x = (int)(GameScreen.earth.getXCenter() + radius*Math.sin(angle));
+        y = (int)(GameScreen.earth.getYCenter() + radius*Math.cos(angle));
         if(Gdx.input.justTouched())
             shoot();
 

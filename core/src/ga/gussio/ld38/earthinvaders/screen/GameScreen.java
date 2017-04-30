@@ -30,7 +30,7 @@ public class GameScreen extends Screen{
         viewport.apply();
         camera.position.set(Game.WIDTH/2, Game.HEIGHT/2, 0);
         camera.update();
-        earth = new Circle((float) (Game.WIDTH/2), (float) (Game.HEIGHT/2), (float) (Game.HEIGHT*0.2)); //shaperenderer werkt hier anders, rendert vanuit het midden, dus radius niet van x/y afhalen.
+        earth = new Circle((float) (Game.WIDTH/2-Game.HEIGHT*0.2), (float) (Game.HEIGHT/2-Game.HEIGHT*0.2), (float) (Game.HEIGHT*0.2)); //shaperenderer werkt hier anders, rendert vanuit het midden, dus radius niet van x/y afhalen.
         entities.add(new Player());
         entities.add(new Meteorite());
     }
@@ -48,7 +48,7 @@ public class GameScreen extends Screen{
         sr.rect(0, 0, Game.WIDTH, Game.HEIGHT);
 
         sr.setColor(Color.WHITE);
-        sr.circle(earth.getX(), earth.getY(), earth.getRadius());
+        sr.circle(earth.getXCenter(), earth.getYCenter(), earth.getRadius());
 
         sr.end();
         for(Entity e : entities){
