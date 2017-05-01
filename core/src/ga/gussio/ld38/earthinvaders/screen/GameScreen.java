@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -26,6 +27,8 @@ public class GameScreen extends Screen{
     public static int health = 100;
     private static int dmgAnimation = 0;
 
+    private Sprite[] meteoriteSprites;
+
     public GameScreen() {
         camera = new OrthographicCamera();
         viewport = new FitViewport(Game.WIDTH, Game.HEIGHT, camera);
@@ -35,7 +38,13 @@ public class GameScreen extends Screen{
         earthTexture = new Sprite(new Texture(Gdx.files.internal("world.png")));
         earth = new Circle((float) (Game.WIDTH/2-Game.HEIGHT*0.2), (float) (Game.HEIGHT/2-Game.HEIGHT*0.2), (float) (Game.HEIGHT*0.2));
         entities.add(new Player());
-        entities.add(new Meteorite());
+        Texture full = new Texture(Gdx.files.internal("meteorite.png"));
+        meteoriteSprites = new Sprite[4];
+        for(int i = 0; i < meteoriteSprites.length; i++){
+            TextureRegion region = new TextureRegion(full, i*20, 0, 20, 20);
+            meteoriteSprites[i] = new Sprite(region);
+        }
+        entities.add(new Meteorite(meteoriteSprites));
     }
 
     @Override
@@ -73,7 +82,9 @@ public class GameScreen extends Screen{
 
     @Override
     public void dispose() {
-
+        for(int i = 0; i < meteoriteSprites.length; i++){
+            meteoriteSprites[i].getTexture().dispose();
+        }
     }
 
     public static void damageEarth(int hits){
