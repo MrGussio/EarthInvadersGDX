@@ -3,8 +3,8 @@ package ga.gussio.ld38.earthinvaders.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 
-import java.awt.Rectangle;
 import java.util.Random;
 
 import ga.gussio.ld38.earthinvaders.Game;
@@ -37,8 +37,9 @@ public class Meteorite extends Entity {
             tempVelY*=-1;
         Rectangle collision = new Rectangle((int) GameScreen.earth.getXCenter(), (int)GameScreen.earth.getYCenter(), radius*2, radius*2);
         Rectangle screen = new Rectangle(0, 0, Game.WIDTH, Game.HEIGHT);
-        while(collision.intersects(screen)){
-            collision.translate((int) tempVelX, (int) tempVelY);
+        while(collision.contains(screen)){
+            collision.x += velX;
+            collision.y += velY;
         }
         x = (float) collision.getX();
         y = (float) collision.getY();
@@ -70,7 +71,6 @@ public class Meteorite extends Entity {
         collision.setX(x);
         collision.setY(y);
         if(collision.hasCollision(GameScreen.earth)){
-            System.out.println("test");
             GameScreen.damageEarth((int)health*3);
 //            Game.playSound("METEOR1.wav", false, -20);
             destroy();
