@@ -29,6 +29,7 @@ public class Bullet extends Entity {
     @Override
     public void render(SpriteBatch sb, ShapeRenderer sr) {
         sr.begin();
+        sr.set(ShapeRenderer.ShapeType.Filled);
         sr.setColor(Color.RED);
         sr.rect(x, y, 5, 5);
         sr.end();
@@ -45,20 +46,19 @@ public class Bullet extends Entity {
         }
     }
 
-//    public void checkCollision(){
-//        for(Entity e : GameScreen.entities){
-//            if(e instanceof Meteorite){
-//                Meteorite m = (Meteorite) e;
-//                double dx = Math.abs(x-m.collision.getXCenter());
-//                double dy = Math.abs(y-m.collision.getYCenter());
-//                double radius = m.collision.getRadius();
-//
-//                if(Math.pow(dx, 2) + Math.pow(dy, 2) <= Math.pow(radius, 2) || dx + dy <= radius){
-//                    m.damage();
-//                    GameScreen.addScore(5);
-//                    GameScreen.entities.remove(this);
-//                }
-//            }
-//        }
-//    }
+    public void checkCollision(){
+        for(Entity e : GameScreen.entities){
+            if(e instanceof Meteorite){
+                Meteorite m = (Meteorite) e;
+                double dx = Math.abs(x-m.collision.getXCenter());
+                double dy = Math.abs(y-m.collision.getYCenter());
+                double radius = m.collision.getRadius();
+
+                if(Math.pow(dx, 2) + Math.pow(dy, 2) <= Math.pow(radius, 2) || dx + dy <= radius){
+                    m.damage();
+                    GameScreen.entities.remove(this);
+                }
+            }
+        }
+    }
 }

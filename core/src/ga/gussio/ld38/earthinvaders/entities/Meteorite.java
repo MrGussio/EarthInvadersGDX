@@ -21,7 +21,7 @@ public class Meteorite extends Entity {
     private float health;
     private float rotationSpeed = 1;
     private float rotation = 0;
-    private Circle collision;
+    public Circle collision;
     private Sprite[] img;
 
     public Meteorite(Sprite[] textures) {
