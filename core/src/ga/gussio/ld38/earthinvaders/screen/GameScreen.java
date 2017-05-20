@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import ga.gussio.ld38.earthinvaders.Game;
+import ga.gussio.ld38.earthinvaders.buttons.Button;
 import ga.gussio.ld38.earthinvaders.entities.Entity;
 import ga.gussio.ld38.earthinvaders.entities.Meteorite;
 import ga.gussio.ld38.earthinvaders.entities.Player;
@@ -28,6 +29,8 @@ public class GameScreen extends Screen{
     private static int dmgAnimation = 0;
 
     private Sprite[] meteoriteSprites;
+
+    private Button leftButton, rightButton;
 
     public GameScreen() {
         camera = new OrthographicCamera();
@@ -45,6 +48,8 @@ public class GameScreen extends Screen{
             meteoriteSprites[i] = new Sprite(region);
         }
         entities.add(new Meteorite(meteoriteSprites));
+        leftButton = new Button(10, 60, 180, "control_button.png");
+        rightButton = new Button(150, 60, "control_button.png");
     }
 
     @Override
@@ -67,6 +72,8 @@ public class GameScreen extends Screen{
         for(Entity e : entities){
             e.render(sb, sr);
         }
+        leftButton.render(sb, sr);
+        rightButton.render(sb, sr);
     }
 
     @Override
