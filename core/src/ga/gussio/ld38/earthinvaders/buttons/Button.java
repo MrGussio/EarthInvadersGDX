@@ -46,7 +46,7 @@ public class Button {
 
     public void render(SpriteBatch sb, ShapeRenderer sr) {
         sb.begin();
-        sb.draw(img, x, y, width, height);
+        sb.draw(img, x, y, width/2, height/2, width, height, 1.0f, 1.0f, rotation);
         sb.end();
     }
 
@@ -83,6 +83,14 @@ public class Button {
         width = (int) (img.getWidth() * scale);
         height = (int) (img.getHeight() * scale);
         collision.set(x, y, width, height);
+    }
+
+    public int getRotation(){
+        return rotation;
+    }
+
+    public void setRotation(int rotation){
+        this.rotation = rotation;
     }
 
     public int getWidth() {
