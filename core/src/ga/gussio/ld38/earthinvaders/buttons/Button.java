@@ -36,7 +36,12 @@ public class Button {
 
     public Button(int x, int y, int width, int height, int rotationInDegr, String filepath) {
         this(x, y, width, height, filepath);
-        this.rotation = rotation;
+        this.rotation = rotationInDegr;
+    }
+
+    public Button(int x, int y, int rotationInDegr, String filepath){
+        this(x, y, filepath);
+        this.rotation = rotationInDegr;
     }
 
     public void render(SpriteBatch sb, ShapeRenderer sr) {
