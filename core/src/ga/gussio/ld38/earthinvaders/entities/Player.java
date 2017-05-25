@@ -2,6 +2,8 @@ package ga.gussio.ld38.earthinvaders.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -12,7 +14,7 @@ import ga.gussio.ld38.earthinvaders.screen.GameScreen;
 
 public class Player extends Entity {
 
-    public int size = 30;
+    public int size = 50;
     private float radius = GameScreen.earth.getRadius()+size/2-3;
     private float angle = 0;
     private int dir = 0; //0 is not moving, -1 is counterclockwise, 1 is clockwise
@@ -20,20 +22,21 @@ public class Player extends Entity {
     private int maxShootInterval = 20;
     private int shootInterval = maxShootInterval;
 
+    private Sprite img;
+
     public Player() {
         super(0, 0);
         this.x = (float) (GameScreen.earth.getXCenter() + radius*Math.sin(angle));
         this.y = (float) (GameScreen.earth.getYCenter() + radius*Math.cos(angle));
+        img = new Sprite(new Texture(Gdx.files.internal("player.png")));
     }
 
     @Override
     public void renderSB(SpriteBatch sb) {
+        sb.draw(img, x-size/2, y-size/2, size/2, size/2, size, size, 1.0f, 1.0f, (float) -Math.toDegrees((double) angle));
     }
 
     public void renderSR(ShapeRenderer sr){
-        sr.setColor(Color.RED);
-        sr.set(ShapeRenderer.ShapeType.Filled);
-        sr.rect(x-size/2, y-size/2, size/2, size/2, size, size, 1.0f, 1.0f, (float) -Math.toDegrees((double) angle));
     }
 
     @Override
