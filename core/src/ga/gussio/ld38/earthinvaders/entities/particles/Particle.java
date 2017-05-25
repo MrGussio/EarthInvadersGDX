@@ -27,12 +27,15 @@ public class Particle extends Entity {
     }
 
     @Override
-    public void render(SpriteBatch sb, ShapeRenderer sr) {
-        sr.begin();
+    public void renderSB(SpriteBatch sb){
+
+    }
+
+    @Override
+    public void renderSR(ShapeRenderer sr) {
         sr.setColor(color);
         sr.set(ShapeRenderer.ShapeType.Filled);
         sr.rect(x, y, size, size);
-        sr.end();
     }
 
     @Override

@@ -44,10 +44,12 @@ public class Button {
         this.rotation = rotationInDegr;
     }
 
-    public void render(SpriteBatch sb, ShapeRenderer sr) {
-        sb.begin();
+    public void renderSB(SpriteBatch sb) {
         sb.draw(img, x, y, width/2, height/2, width, height, 1.0f, 1.0f, rotation);
-        sb.end();
+    }
+
+    public void renderSR(ShapeRenderer sr){
+
     }
 
     public void tick() {

@@ -77,29 +77,34 @@ public class GameScreen extends Screen implements InputListener {
         sb.setProjectionMatrix(camera.combined);
         sr.setAutoShapeType(true);
         sr.setProjectionMatrix(camera.combined);
-        //actual rendering
+        //SHAPERENDERER RENDERING
         sr.begin();
         sr.set(ShapeRenderer.ShapeType.Filled);
-
         //rendering background
         sr.setColor(new Color(23/255f, 23/255f, 23/255f, 1f));
         sr.rect(0, 0, Game.WIDTH, Game.HEIGHT);
-        sr.end();
 
         //rendering background particles
         for(int i = 0; i < background.length; i++){
-            background[i].render(sb, sr);
+            background[i].renderSR(sr);
         }
+        for(Entity e : entities){
+            e.renderSR(sr);
+        }
+        leftButton.renderSR(sr);
+        rightButton.renderSR(sr);
+        sr.end();
 
-        //rendering earth
+        //SPRITEBATCH RENDERING
         sb.begin();
         sb.draw(earthTexture, earth.getX(), earth.getY(), earth.getRadius()*2, earth.getRadius()*2);
-        sb.end();
         for(Entity e : entities){
-            e.render(sb, sr);
+            e.renderSB(sb);
         }
-        leftButton.render(sb, sr);
-        rightButton.render(sb, sr);
+        leftButton.renderSB(sb);
+        rightButton.renderSB(sb);
+        sb.end();
+
     }
 
     @Override

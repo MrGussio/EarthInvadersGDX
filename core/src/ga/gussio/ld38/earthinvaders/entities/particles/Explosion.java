@@ -29,9 +29,15 @@ public class Explosion extends Entity {
     }
 
     @Override
-    public void render(SpriteBatch sb, ShapeRenderer sr) {
+    public void renderSB(SpriteBatch sb) {
         for(Particle p : particles){
-            p.render(sb, sr);
+            p.renderSB(sb);
+        }
+    }
+
+    public void renderSR(ShapeRenderer sr){
+        for(Particle p : particles){
+            p.renderSR(sr);
         }
     }
 

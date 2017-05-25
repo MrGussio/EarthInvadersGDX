@@ -33,19 +33,18 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		listeners.add((GameScreen) currentScreen);
 		Gdx.graphics.requestRendering();
 		Gdx.input.setInputProcessor(this);
+		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); //fixes red screen bug on startup
 	}
 
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); //fixes red screen bug on startup
 		if(currentScreen != null){
 			currentScreen.tick();
 			currentScreen.render(batch, sr);
 		}
 	}
-	
 	@Override
 	public void dispose () {
 		batch.dispose();

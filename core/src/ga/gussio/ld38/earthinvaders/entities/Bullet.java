@@ -27,12 +27,15 @@ public class Bullet extends Entity {
     }
 
     @Override
-    public void render(SpriteBatch sb, ShapeRenderer sr) {
-        sr.begin();
+    public void renderSB(SpriteBatch sb) {
+
+    }
+
+    @Override
+    public void renderSR(ShapeRenderer sr){
         sr.set(ShapeRenderer.ShapeType.Filled);
         sr.setColor(Color.RED);
         sr.rect(x, y, 5, 5);
-        sr.end();
     }
 
     @Override

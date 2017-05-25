@@ -27,13 +27,13 @@ public class Player extends Entity {
     }
 
     @Override
-    public void render(SpriteBatch sb, ShapeRenderer sr) {
-        sr.setProjectionMatrix(sb.getProjectionMatrix());
-        sr.begin();
+    public void renderSB(SpriteBatch sb) {
+    }
+
+    public void renderSR(ShapeRenderer sr){
         sr.setColor(Color.RED);
         sr.set(ShapeRenderer.ShapeType.Filled);
         sr.rect(x-size/2, y-size/2, size/2, size/2, size, size, 1.0f, 1.0f, (float) -Math.toDegrees((double) angle));
-        sr.end();
     }
 
     @Override

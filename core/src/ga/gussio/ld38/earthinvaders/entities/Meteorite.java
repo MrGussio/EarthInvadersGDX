@@ -58,12 +58,15 @@ public class Meteorite extends Entity {
     }
 
     @Override
-    public void render(SpriteBatch sb, ShapeRenderer sr) {
-        sb.begin();
+    public void renderSB(SpriteBatch sb) {
         sb.draw(this.img[(int) (4-health)], collision.getX(), collision.getY(),
                 collision.getRadius(), collision.getRadius(), collision.getRadius()*2,
                 collision.getRadius()*2, 1.0f, 1.0f, rotation);
-        sb.end();
+    }
+
+    @Override
+    public void renderSR(ShapeRenderer sr){
+
     }
 
     @Override
