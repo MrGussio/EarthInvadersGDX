@@ -7,7 +7,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.awt.Graphics;
 
-public abstract class Screen {
+import ga.gussio.ld38.earthinvaders.InputListener;
+
+public abstract class Screen implements InputListener {
 
     public OrthographicCamera camera;
     public Viewport viewport;

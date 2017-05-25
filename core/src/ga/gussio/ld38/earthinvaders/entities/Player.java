@@ -15,6 +15,7 @@ public class Player extends Entity {
     public int size = 30;
     private float radius = GameScreen.earth.getRadius()+size/2-3;
     private float angle = 0;
+    private int dir = 0; //0 is not moving, -1 is counterclockwise, 1 is clockwise
 
     private int maxShootInterval = 20;
     private int shootInterval = maxShootInterval;
@@ -37,11 +38,9 @@ public class Player extends Entity {
 
     @Override
     public void tick() {
-        angle += Math.toRadians(1);
+        angle+= Math.toRadians(dir*1.5);
         x = (int)(GameScreen.earth.getXCenter() + radius*Math.sin(angle));
         y = (int)(GameScreen.earth.getYCenter() + radius*Math.cos(angle));
-        if(Gdx.input.justTouched())
-            shoot();
 
         if(shootInterval != maxShootInterval){
             shootInterval--;
@@ -57,4 +56,12 @@ public class Player extends Entity {
             shootInterval--;
         }
     }
+
+    public void setDirection(int dir){
+        if(dir >= -1 && dir <= 1)
+            this.dir = dir;
+        else
+            Gdx.app.error("EarthInvaders", "Error: Invalid Direction ["+dir+"]");
+    }
+
 }

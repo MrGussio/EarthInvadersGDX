@@ -2,21 +2,25 @@ package ga.gussio.ld38.earthinvaders;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
+import java.util.ArrayList;
 
 import ga.gussio.ld38.earthinvaders.screen.GameScreen;
 import ga.gussio.ld38.earthinvaders.screen.Screen;
 
-public class Game extends ApplicationAdapter {
+public class Game extends ApplicationAdapter implements InputProcessor {
 
 	public static int WIDTH = 1920, HEIGHT = 1080;
 	public static float aspectRatio;
 
 	SpriteBatch batch;
 	ShapeRenderer sr;
+
+	private ArrayList<InputListener> listeners = new ArrayList<InputListener>();
 
 	private static Screen currentScreen;
 	
@@ -26,7 +30,9 @@ public class Game extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		sr = new ShapeRenderer();
 		currentScreen = new GameScreen();
+		listeners.add((GameScreen) currentScreen);
 		Gdx.graphics.requestRendering();
+		Gdx.input.setInputProcessor(this);
 	}
 
 	@Override
@@ -44,5 +50,51 @@ public class Game extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 		currentScreen.dispose();
+	}
+
+	@Override
+	public boolean keyDown(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		for(InputListener l : listeners){
+			l.touchDown(screenX, screenY, pointer, button);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		for(InputListener l : listeners){
+			l.touchUp(screenX, screenY, pointer, button);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(int amount) {
+		return false;
 	}
 }

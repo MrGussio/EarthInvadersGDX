@@ -51,7 +51,7 @@ public class Button {
     }
 
     public void tick() {
-
+        collision.set(x, y, width, height);
     }
 
     public void dispose() {
@@ -105,10 +105,28 @@ public class Button {
         return filepath;
     }
 
-    public void click(Vector2 p) {
+    public boolean click(Vector2 p) {
         if (collision.contains(p)) {
             this.clicked = true;
+            return true;
         }
+        return false;
+    }
 
+    public boolean release(Vector2 p){
+        if(collision.contains((p))){
+            this.clicked = false;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean drag(Vector2 p){
+        System.out.print("dragged");
+        if(collision.contains(p)){
+            this.clicked=true;
+            return true;
+        }
+        return false;
     }
 }
