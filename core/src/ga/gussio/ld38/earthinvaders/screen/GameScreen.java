@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.HashMap;
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import ga.gussio.ld38.earthinvaders.Game;
@@ -21,6 +22,7 @@ import ga.gussio.ld38.earthinvaders.buttons.Button;
 import ga.gussio.ld38.earthinvaders.entities.Entity;
 import ga.gussio.ld38.earthinvaders.entities.Meteorite;
 import ga.gussio.ld38.earthinvaders.entities.Player;
+import ga.gussio.ld38.earthinvaders.entities.particles.Particle;
 import ga.gussio.ld38.earthinvaders.math.Circle;
 
 public class GameScreen extends Screen implements InputListener {
@@ -34,6 +36,7 @@ public class GameScreen extends Screen implements InputListener {
     private static int dmgAnimation = 0;
 
     private Sprite[] meteoriteSprites;
+    private Particle[] background;
 
     private Button leftButton, rightButton;
     private Player player;
@@ -57,6 +60,16 @@ public class GameScreen extends Screen implements InputListener {
         entities.add(new Meteorite(meteoriteSprites));
         leftButton = new Button(10, 60, 180, "control_button.png");
         rightButton = new Button(150, 60, "control_button.png");
+
+        //generating randomized background
+        Random r = new Random();
+        background = new Particle[r.nextInt(55-45)+45];
+        for(int i = 0; i < background.length; i++){
+            int size = r.nextInt(4)+1;
+            int x = r.nextInt(Game.WIDTH);
+            int y = r.nextInt(Game.HEIGHT);
+            background[i] = new Particle(x, y, 0, 0, -1, new Color(207/255f, 187/255f, 20/255f, 1f), size);
+        }
     }
 
     @Override
@@ -67,10 +80,16 @@ public class GameScreen extends Screen implements InputListener {
         //actual rendering
         sr.begin();
         sr.set(ShapeRenderer.ShapeType.Filled);
+
         //rendering background
         sr.setColor(new Color(23/255f, 23/255f, 23/255f, 1f));
         sr.rect(0, 0, Game.WIDTH, Game.HEIGHT);
         sr.end();
+
+        //rendering background particles
+        for(int i = 0; i < background.length; i++){
+            background[i].render(sb, sr);
+        }
 
         //rendering earth
         sb.begin();
