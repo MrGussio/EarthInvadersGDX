@@ -35,7 +35,7 @@ public class GameScreen extends Screen implements InputListener {
     public static int health = 100;
     private static int dmgAnimation = 0;
 
-    private Sprite[] meteoriteSprites;
+    private Sprite[] meteoriteSprites, warningSprites;
     private Particle[] background;
 
     private Button leftButton, rightButton;
@@ -61,7 +61,11 @@ public class GameScreen extends Screen implements InputListener {
             TextureRegion region = new TextureRegion(full, i*20, 0, 20, 20);
             meteoriteSprites[i] = new Sprite(region);
         }
-        entities.add(new Meteorite(meteoriteSprites));
+        Texture full2 = new Texture(Gdx.files.internal("warning.png"));
+        warningSprites = new Sprite[2];
+        warningSprites[0] = new Sprite(new TextureRegion(full2, 0, 0, 9, 9));
+        warningSprites[1] = new Sprite(new TextureRegion(full2, 9, 0, 9, 9));
+
         leftButton = new Button(10, 60, 180, "control_button.png");
         rightButton = new Button(150, 60, "control_button.png");
 
@@ -128,7 +132,7 @@ public class GameScreen extends Screen implements InputListener {
         }
 
         if(System.currentTimeMillis() > spawnTimer){
-            entities.add(new Meteorite(meteoriteSprites));
+            entities.add(new Meteorite(meteoriteSprites, warningSprites));
             long dtime = System.currentTimeMillis()-startTime;
             if(dtime > 10000){
                 startTime = System.currentTimeMillis();

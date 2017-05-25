@@ -1,8 +1,11 @@
 package ga.gussio.ld38.earthinvaders.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -22,9 +25,11 @@ public class Meteorite extends Entity {
     private float rotationSpeed = 1;
     private float rotation = 0;
     public Circle collision;
-    private Sprite[] img;
+    private Rectangle warningRect;
+    private long warningTime;
+    private Sprite[] img, warning;
 
-    public Meteorite(Sprite[] textures) {
+    public Meteorite(Sprite[] textures, Sprite[] warning) {
         super(0, 0);
         Random r = new Random();
         int direction = r.nextInt(360+1);
@@ -43,6 +48,10 @@ public class Meteorite extends Entity {
         while(collision.overlaps(screen)){
             collision.setPosition(collision.x+tempVelX, collision.y+tempVelY);
         }
+        warningRect = new Rectangle(collision.x, collision.y, 50, 50);
+        while(!warningRect.overlaps(screen)){
+            warningRect.setPosition(collision.x-tempVelX*15, collision.y-tempVelY*15);
+        }
         x = (float) collision.getX();
         y = (float) collision.getY();
         float xSpeed = (Game.WIDTH/2-x) / 1.0f;
@@ -55,6 +64,8 @@ public class Meteorite extends Entity {
         velY = ySpeed;
         this.collision = new Circle(x-radius, y-radius, radius);
         this.img = textures;
+        this.warning = warning;
+        warningTime = System.currentTimeMillis()+3000;
     }
 
     @Override
@@ -62,6 +73,9 @@ public class Meteorite extends Entity {
         sb.draw(this.img[(int) (4-health)], collision.getX(), collision.getY(),
                 collision.getRadius(), collision.getRadius(), collision.getRadius()*2,
                 collision.getRadius()*2, 1.0f, 1.0f, rotation);
+        if(System.currentTimeMillis() < warningTime){
+           sb.draw(warning[warningTime-System.currentTimeMillis() < 1500 ? 1 : 0], warningRect.x, warningRect.y, 50, 50);
+        }
     }
 
     @Override
@@ -71,8 +85,10 @@ public class Meteorite extends Entity {
 
     @Override
     public void tick() {
-        x += velX;
-        y += velY;
+        if(System.currentTimeMillis()>warningTime) {
+            x += velX;
+            y += velY;
+        }
         collision.setX(x);
         collision.setY(y);
         if(collision.hasCollision(GameScreen.earth)){
