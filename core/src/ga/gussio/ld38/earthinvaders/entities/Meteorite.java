@@ -40,7 +40,7 @@ public class Meteorite extends Entity {
         Rectangle collision = new Rectangle((int) GameScreen.earth.getXCenter(),
                 (int)GameScreen.earth.getYCenter(), radius*2, radius*2);
         Rectangle screen = new Rectangle(0, 0, Game.WIDTH, Game.HEIGHT);
-        while(screen.contains(collision)){
+        while(collision.overlaps(screen)){
             collision.setPosition(collision.x+tempVelX, collision.y+tempVelY);
         }
         x = (float) collision.getX();

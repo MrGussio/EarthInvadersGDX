@@ -41,6 +41,10 @@ public class GameScreen extends Screen implements InputListener {
     private Button leftButton, rightButton;
     private Player player;
 
+    private long spawnTimer;
+    private long startTime;
+    private int spawnFactor = 6000;
+
     public GameScreen() {
         camera = new OrthographicCamera();
         viewport = new FitViewport(Game.WIDTH, Game.HEIGHT, camera);
@@ -121,6 +125,15 @@ public class GameScreen extends Screen implements InputListener {
         if(dmgAnimation > 0){
             health--;
             dmgAnimation--;
+        }
+
+        if(System.currentTimeMillis() > spawnTimer){
+            entities.add(new Meteorite(meteoriteSprites));
+            long dtime = System.currentTimeMillis()-startTime;
+            if(dtime > 10000){
+                startTime = System.currentTimeMillis();
+            }
+            spawnTimer = System.currentTimeMillis()+spawnFactor;
         }
     }
 
