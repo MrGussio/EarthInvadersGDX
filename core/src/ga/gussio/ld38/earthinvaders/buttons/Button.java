@@ -122,7 +122,6 @@ public class Button {
     }
 
     public boolean drag(Vector2 p){
-        System.out.print("dragged");
         if(collision.contains(p)){
             this.clicked=true;
             return true;

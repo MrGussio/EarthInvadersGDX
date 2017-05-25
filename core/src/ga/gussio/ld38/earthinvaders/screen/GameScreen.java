@@ -151,13 +151,22 @@ public class GameScreen extends Screen implements InputListener {
         Vector3 coords = camera.unproject(new Vector3(screenX, screenY, 0));
         boolean left = leftButton.drag(new Vector2(coords.x, coords.y));
         boolean right = rightButton.drag(new Vector2(coords.x, coords.y));
+        int currentValue = pointers.get(pointer);
         pointers.remove(pointer);
         if(left) {
             pointers.put(pointer, 1);
+            leftButton.clicked = true;
+            rightButton.clicked = false;
         }else if(right){
             pointers.put(pointer, 2);
+            leftButton.clicked = false;
+            rightButton.clicked = true;
         }else{
             pointers.put(pointer, 0);
+            if(currentValue == 1)
+                leftButton.clicked = false;
+            else if(currentValue == 2)
+                rightButton.clicked = false;
         }
     }
 }

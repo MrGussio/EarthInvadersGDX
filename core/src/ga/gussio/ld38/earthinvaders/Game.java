@@ -85,6 +85,9 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		for(InputListener l : listeners){
+			l.touchDragged(screenX, screenY, pointer);
+		}
 		return false;
 	}
 
