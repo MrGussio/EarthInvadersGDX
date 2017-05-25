@@ -39,7 +39,7 @@ public class Bullet extends Entity {
     public void tick() {
         x += velX;
         y += velY;
-//        checkCollision();
+        checkCollision();
         lifetime--;
         if(lifetime < 0){
             GameScreen.entities.remove(this);
