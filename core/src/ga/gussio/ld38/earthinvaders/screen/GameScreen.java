@@ -1,9 +1,11 @@
 package ga.gussio.ld38.earthinvaders.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -32,10 +34,12 @@ public class GameScreen extends Screen implements InputListener {
     public static CopyOnWriteArrayList<Entity> entities = new CopyOnWriteArrayList<Entity>();
     private HashMap<Integer, Integer> pointers = new HashMap<Integer, Integer>();
 
-    public static int health = 100;
+    public static float maxHealth = 100;
+    public static float health = maxHealth;
     private static int dmgAnimation = 0;
 
     private Sprite[] meteoriteSprites, warningSprites;
+    private BitmapFont scoreFont;
     private Particle[] background;
 
     private Button leftButton, rightButton;
@@ -44,6 +48,9 @@ public class GameScreen extends Screen implements InputListener {
     private long spawnTimer;
     private long startTime;
     private int spawnFactor = 6000;
+
+    private static int score = 0;
+    private int scoreTimer = 0;
 
     public GameScreen() {
         camera = new OrthographicCamera();
@@ -66,6 +73,9 @@ public class GameScreen extends Screen implements InputListener {
         warningSprites[0] = new Sprite(new TextureRegion(full2, 0, 0, 9, 9));
         warningSprites[1] = new Sprite(new TextureRegion(full2, 9, 0, 9, 9));
 
+        scoreFont = new BitmapFont(Gdx.files.internal("score.fnt"), Gdx.files.internal("score.png"), false);
+        scoreFont.getData().setScale(0.8f);
+
         leftButton = new Button(10, 60, 180, "control_button.png");
         rightButton = new Button(150, 60, "control_button.png");
 
@@ -78,6 +88,7 @@ public class GameScreen extends Screen implements InputListener {
             int y = r.nextInt(Game.HEIGHT);
             background[i] = new Particle(x, y, 0, 0, -1, new Color(207/255f, 187/255f, 20/255f, 1f), size);
         }
+        score = 0; // resetting static value
     }
 
     @Override
@@ -101,7 +112,16 @@ public class GameScreen extends Screen implements InputListener {
         }
         leftButton.renderSR(sr);
         rightButton.renderSR(sr);
+
+        //HUD
+        sr.setColor(Color.GRAY);
+        sr.rect(10-3, Game.HEIGHT-10-50-3, 300+6, 50+6);
+        sr.setColor(Color.RED);
+        sr.rect(10, Game.HEIGHT-10-50, 300, 50);
+        sr.setColor(Color.GREEN);
+        sr.rect(10, Game.HEIGHT-10-50, 300*(float)(health/maxHealth), 50);
         sr.end();
+
 
         //SPRITEBATCH RENDERING
         sb.begin();
@@ -111,8 +131,8 @@ public class GameScreen extends Screen implements InputListener {
         }
         leftButton.renderSB(sb);
         rightButton.renderSB(sb);
+        scoreFont.draw(sb, "Score: "+score, 360, Game.HEIGHT-10);
         sb.end();
-
     }
 
     @Override
@@ -139,6 +159,12 @@ public class GameScreen extends Screen implements InputListener {
             }
             spawnTimer = System.currentTimeMillis()+spawnFactor;
         }
+
+        scoreTimer++;
+        if(scoreTimer > 60){
+            score++;
+            scoreTimer = 0;
+        }
     }
 
     @Override
@@ -152,6 +178,10 @@ public class GameScreen extends Screen implements InputListener {
         dmgAnimation+=hits;
     }
 
+    public static void addScore(int score){
+        GameScreen.score += score;
+    }
+
     @Override
     public void touchDown(int screenX, int screenY, int pointer, int button) {
         Vector3 coords = camera.unproject(new Vector3(screenX, screenY, 0));
@@ -160,7 +190,6 @@ public class GameScreen extends Screen implements InputListener {
         if(!left &! right){//didnt hit a button
             player.shoot();
         }
-        System.out.println(pointer);
         if(left)
             pointers.put(pointer, 1);
         else if(right)

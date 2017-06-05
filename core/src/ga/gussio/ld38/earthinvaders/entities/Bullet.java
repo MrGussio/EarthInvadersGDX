@@ -59,6 +59,7 @@ public class Bullet extends Entity {
 
                 if(Math.pow(dx, 2) + Math.pow(dy, 2) <= Math.pow(radius, 2) || dx + dy <= radius){
                     m.damage();
+                    GameScreen.addScore(5);
                     GameScreen.entities.remove(this);
                 }
             }
