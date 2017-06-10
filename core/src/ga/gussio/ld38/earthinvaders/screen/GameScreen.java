@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -42,7 +43,7 @@ public class GameScreen extends Screen implements InputListener {
     private BitmapFont scoreFont;
     private Particle[] background;
 
-    private Button leftButton, rightButton;
+    private Button leftButton, rightButton, exit, retry;
     private Player player;
 
     private long spawnTimer;
@@ -79,6 +80,9 @@ public class GameScreen extends Screen implements InputListener {
 
         leftButton = new Button(10, 60, 180, "buttons/control_button.png");
         rightButton = new Button(150, 60, "buttons/control_button.png");
+
+        exit = new Button(1230, 450, "buttons/exit.png");
+        retry = new Button(500, 450, "buttons/retry.png");
 
         //generating randomized background
         Random r = new Random();
@@ -130,42 +134,74 @@ public class GameScreen extends Screen implements InputListener {
         for(Entity e : entities){
             e.renderSB(sb);
         }
+
         leftButton.renderSB(sb);
         rightButton.renderSB(sb);
+
         scoreFont.draw(sb, "Score: "+score, 360, Game.HEIGHT-10);
         sb.end();
-        System.out.println("Test");
+
+        if(health <= 0){
+            GlyphLayout layout = new GlyphLayout(scoreFont, "Game Over! Score: "+score);
+            float fontX = Game.WIDTH/4 + (Game.WIDTH/2 - layout.width) / 2;
+            sr.begin();
+            sr.set(ShapeRenderer.ShapeType.Filled);
+            sr.setColor(Color.GRAY);
+            sr.rect(Game.WIDTH/4, Game.HEIGHT*4/10, Game.WIDTH/2, Game.HEIGHT*4/10);
+            sr.end();
+
+            sb.begin();
+            retry.renderSB(sb);
+            exit.renderSB(sb);
+            scoreFont.draw(sb, "Game Over! Score: "+score, fontX, Game.HEIGHT*7/10);
+            sb.end();
+        }
     }
 
     @Override
     public void tick() {
-        if(leftButton.clicked)
-            player.setDirection(-1);
-        else if(rightButton.clicked)
-            player.setDirection(1);
-        else
-            player.setDirection(0);
-        for(Entity e : entities){
-            e.tick();
-        }
-        if(dmgAnimation > 0){
-            health--;
-            dmgAnimation--;
-        }
-
-        if(System.currentTimeMillis() > spawnTimer){
-            entities.add(new Meteorite(meteoriteSprites, warningSprites));
-            long dtime = System.currentTimeMillis()-startTime;
-            if(dtime > 10000){
-                startTime = System.currentTimeMillis();
+        if(health > 0) {
+            if (leftButton.clicked)
+                player.setDirection(-1);
+            else if (rightButton.clicked)
+                player.setDirection(1);
+            else
+                player.setDirection(0);
+            for (Entity e : entities) {
+                e.tick();
             }
-            spawnTimer = System.currentTimeMillis()+spawnFactor;
-        }
+            if (dmgAnimation > 0) {
+                health--;
+                dmgAnimation--;
+            }
 
-        scoreTimer++;
-        if(scoreTimer > 60){
-            score++;
-            scoreTimer = 0;
+            if (System.currentTimeMillis() > spawnTimer) {
+                entities.add(new Meteorite(meteoriteSprites, warningSprites));
+                long dtime = System.currentTimeMillis() - startTime;
+                if (dtime > 10000) {
+                    startTime = System.currentTimeMillis();
+                }
+                spawnTimer = System.currentTimeMillis() + spawnFactor;
+            }
+
+            scoreTimer++;
+            if (scoreTimer > 60) {
+                score++;
+                scoreTimer = 0;
+            }
+        }else{
+            retry.tick();
+            exit.tick();
+
+            if(retry.clicked){
+                retry.clicked = false;
+                Game.setCurrentScreen(new GameScreen());
+            }
+
+            if(exit.clicked){
+                exit.clicked = false;
+                Game.setCurrentScreen(new MenuScreen());
+            }
         }
     }
 
@@ -199,6 +235,9 @@ public class GameScreen extends Screen implements InputListener {
             pointers.put(pointer, 2);
         else
             pointers.put(pointer, 0);
+
+        retry.click(new Vector2(coords.x, coords.y));
+        exit.click(new Vector2(coords.x, coords.y));
     }
 
     @Override
@@ -217,6 +256,8 @@ public class GameScreen extends Screen implements InputListener {
             }
             pointers.remove(pointer);
         }
+        retry.release(new Vector2(coords.x, coords.y));
+        exit.release(new Vector2(coords.x, coords.y));
     }
 
     @Override
@@ -224,22 +265,26 @@ public class GameScreen extends Screen implements InputListener {
         Vector3 coords = camera.unproject(new Vector3(screenX, screenY, 0));
         boolean left = leftButton.drag(new Vector2(coords.x, coords.y));
         boolean right = rightButton.drag(new Vector2(coords.x, coords.y));
-        int currentValue = pointers.get(pointer);
-        pointers.remove(pointer);
-        if(left) {
-            pointers.put(pointer, 1);
-            leftButton.clicked = true;
-            rightButton.clicked = false;
-        }else if(right){
-            pointers.put(pointer, 2);
-            leftButton.clicked = false;
-            rightButton.clicked = true;
-        }else{
-            pointers.put(pointer, 0);
-            if(currentValue == 1)
-                leftButton.clicked = false;
-            else if(currentValue == 2)
+        if(pointers.containsKey(pointer)) {
+            int currentValue = pointers.get(pointer);
+            if (left) {
+                pointers.put(pointer, 1);
+                leftButton.clicked = true;
                 rightButton.clicked = false;
+            } else if (right) {
+                pointers.put(pointer, 2);
+                leftButton.clicked = false;
+                rightButton.clicked = true;
+            } else {
+                pointers.put(pointer, 0);
+                if (currentValue == 1)
+                    leftButton.clicked = false;
+                else if (currentValue == 2)
+                    rightButton.clicked = false;
+            }
+            pointers.remove(pointer);
         }
+        retry.drag(new Vector2(coords.x, coords.y));
+        exit.drag(new Vector2(coords.x, coords.y));
     }
 }
