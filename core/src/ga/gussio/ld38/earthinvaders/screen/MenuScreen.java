@@ -66,7 +66,6 @@ public class MenuScreen extends Screen implements InputListener {
         sb.draw(logo, Game.WIDTH/2-(logo.getTexture().getWidth()*10)/2, Game.HEIGHT-50-logo.getHeight()*10, logo.getWidth()*10, logo.getHeight()*10);
         play.renderSB(sb);
         sb.end();
-
     }
 
     @Override
@@ -81,7 +80,8 @@ public class MenuScreen extends Screen implements InputListener {
 
     @Override
     public void dispose() {
-
+        play.dispose();
+        logo.getTexture().dispose();
     }
 
     @Override
