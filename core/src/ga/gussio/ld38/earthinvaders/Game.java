@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import java.util.ArrayList;
 
 import ga.gussio.ld38.earthinvaders.screen.GameScreen;
+import ga.gussio.ld38.earthinvaders.screen.MenuScreen;
 import ga.gussio.ld38.earthinvaders.screen.Screen;
 
 public class Game extends ApplicationAdapter implements InputProcessor {
@@ -20,7 +21,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	SpriteBatch batch;
 	ShapeRenderer sr;
 
-	private ArrayList<InputListener> listeners = new ArrayList<InputListener>();
+	private static ArrayList<InputListener> listeners = new ArrayList<InputListener>();
 
 	private static Screen currentScreen;
 	
@@ -29,8 +30,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		aspectRatio = (float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth();
 		batch = new SpriteBatch();
 		sr = new ShapeRenderer();
-		currentScreen = new GameScreen();
-		listeners.add((GameScreen) currentScreen);
+		setCurrentScreen(new MenuScreen());
 		Gdx.graphics.requestRendering();
 		Gdx.input.setInputProcessor(this);
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); //fixes red screen bug on startup
@@ -98,5 +98,15 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	@Override
 	public boolean scrolled(int amount) {
 		return false;
+	}
+
+	public static void setCurrentScreen(Screen s){
+//		if(currentScreen != null)
+////			currentScreen.dispose();
+		if(listeners.contains(currentScreen))
+			listeners.remove(currentScreen);
+		currentScreen = s;
+		listeners.add(currentScreen);
+		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 }

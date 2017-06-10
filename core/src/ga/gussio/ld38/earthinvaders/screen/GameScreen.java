@@ -58,6 +58,7 @@ public class GameScreen extends Screen implements InputListener {
         viewport.apply();
         camera.position.set(Game.WIDTH/2, Game.HEIGHT/2, 0);
         camera.update();
+
         earthTexture = new Sprite(new Texture(Gdx.files.internal("world.png")));
         earth = new Circle((float) (Game.WIDTH/2-Game.HEIGHT*0.2), (float) (Game.HEIGHT/2-Game.HEIGHT*0.2), (float) (Game.HEIGHT*0.2));
         this.player = new Player();
@@ -76,8 +77,8 @@ public class GameScreen extends Screen implements InputListener {
         scoreFont = new BitmapFont(Gdx.files.internal("score.fnt"), Gdx.files.internal("score.png"), false);
         scoreFont.getData().setScale(0.8f);
 
-        leftButton = new Button(10, 60, 180, "control_button.png");
-        rightButton = new Button(150, 60, "control_button.png");
+        leftButton = new Button(10, 60, 180, "buttons/control_button.png");
+        rightButton = new Button(150, 60, "buttons/control_button.png");
 
         //generating randomized background
         Random r = new Random();
@@ -133,6 +134,7 @@ public class GameScreen extends Screen implements InputListener {
         rightButton.renderSB(sb);
         scoreFont.draw(sb, "Score: "+score, 360, Game.HEIGHT-10);
         sb.end();
+        System.out.println("Test");
     }
 
     @Override
@@ -172,6 +174,7 @@ public class GameScreen extends Screen implements InputListener {
         for(int i = 0; i < meteoriteSprites.length; i++){
             meteoriteSprites[i].getTexture().dispose();
         }
+        System.out.print("dispose");
     }
 
     public static void damageEarth(int hits){
