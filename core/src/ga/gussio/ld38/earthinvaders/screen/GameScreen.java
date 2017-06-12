@@ -78,8 +78,8 @@ public class GameScreen extends Screen implements InputListener {
         scoreFont = new BitmapFont(Gdx.files.internal("score.fnt"), Gdx.files.internal("score.png"), false);
         scoreFont.getData().setScale(0.8f);
 
-        leftButton = new Button(10, 60, 180, "buttons/control_button.png");
-        rightButton = new Button(150, 60, "buttons/control_button.png");
+        leftButton = new Button(10, 10, 180, "buttons/control_button.png");
+        rightButton = new Button(150, 10, "buttons/control_button.png");
 
         exit = new Button(1230, 450, "buttons/exit.png");
         retry = new Button(500, 450, "buttons/retry.png");
@@ -265,8 +265,13 @@ public class GameScreen extends Screen implements InputListener {
         Vector3 coords = camera.unproject(new Vector3(screenX, screenY, 0));
         boolean left = leftButton.drag(new Vector2(coords.x, coords.y));
         boolean right = rightButton.drag(new Vector2(coords.x, coords.y));
-        if(pointers.containsKey(pointer)) {
-            int currentValue = pointers.get(pointer);
+        int currentValue;
+        if(pointers.containsKey(pointers)) {
+            currentValue = pointers.get(pointer);
+            pointers.remove(pointer);
+        }else{
+            currentValue = 0;
+        }
             if (left) {
                 pointers.put(pointer, 1);
                 leftButton.clicked = true;
@@ -282,8 +287,6 @@ public class GameScreen extends Screen implements InputListener {
                 else if (currentValue == 2)
                     rightButton.clicked = false;
             }
-            pointers.remove(pointer);
-        }
         retry.drag(new Vector2(coords.x, coords.y));
         exit.drag(new Vector2(coords.x, coords.y));
     }
