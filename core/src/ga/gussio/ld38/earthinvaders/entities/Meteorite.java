@@ -92,7 +92,7 @@ public class Meteorite extends Entity {
         collision.setX(x);
         collision.setY(y);
         if(collision.hasCollision(GameScreen.earth)){
-            GameScreen.damageEarth((int)health*3);
+            GameScreen.damageEarth((int)health*5);
 //            Game.playSound("METEOR1.wav", false, -20);
             destroy();
         }

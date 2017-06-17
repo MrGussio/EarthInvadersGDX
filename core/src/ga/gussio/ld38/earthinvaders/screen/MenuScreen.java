@@ -25,14 +25,15 @@ public class MenuScreen extends Screen implements InputListener {
     private Particle[] background;
     private Sprite logo;
     private Button play;
-
+    private BitmapFont betaText;
     public MenuScreen(){
         camera = new OrthographicCamera();
         viewport = new FitViewport(Game.WIDTH, Game.HEIGHT, camera);
         viewport.apply();
         camera.position.set(Game.WIDTH/2, Game.HEIGHT/2, 0);
         camera.update();
-
+        betaText = new BitmapFont(Gdx.files.internal("score.fnt"), Gdx.files.internal("score.png"), false);
+        betaText.getData().setScale(0.35f);
         logo = new Sprite(new Texture("logo.png"));
         Random r = new Random();
         background = new Particle[r.nextInt(55-45)+45];
@@ -65,6 +66,7 @@ public class MenuScreen extends Screen implements InputListener {
         sb.begin();
         sb.draw(logo, Game.WIDTH/2-(logo.getTexture().getWidth()*10)/2, Game.HEIGHT-50-logo.getHeight()*10, logo.getWidth()*10, logo.getHeight()*10);
         play.renderSB(sb);
+        betaText.draw(sb, "Beta Release - Copyright 2017 Gussio. All rights reserved. Visit https://gussio.ga/ for more info.", 10, 25);
         sb.end();
     }
 

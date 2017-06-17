@@ -101,8 +101,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	}
 
 	public static void setCurrentScreen(Screen s){
-//		if(currentScreen != null)
-////			currentScreen.dispose();
+		if(currentScreen != null)
+			currentScreen.dispose();
 		if(listeners.contains(currentScreen))
 			listeners.remove(currentScreen);
 		currentScreen = s;

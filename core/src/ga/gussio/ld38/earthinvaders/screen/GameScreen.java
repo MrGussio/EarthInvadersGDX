@@ -54,6 +54,7 @@ public class GameScreen extends Screen implements InputListener {
     private int scoreTimer = 0;
 
     public GameScreen() {
+        entities.clear();
         camera = new OrthographicCamera();
         viewport = new FitViewport(Game.WIDTH, Game.HEIGHT, camera);
         viewport.apply();
@@ -93,7 +94,6 @@ public class GameScreen extends Screen implements InputListener {
             int y = r.nextInt(Game.HEIGHT);
             background[i] = new Particle(x, y, 0, 0, -1, new Color(207/255f, 187/255f, 20/255f, 1f), size);
         }
-        score = 0; // resetting static value
     }
 
     @Override
@@ -210,7 +210,10 @@ public class GameScreen extends Screen implements InputListener {
         for(int i = 0; i < meteoriteSprites.length; i++){
             meteoriteSprites[i].getTexture().dispose();
         }
-        System.out.print("dispose");
+
+        health = maxHealth;
+        score = 0;
+        dmgAnimation = 0;
     }
 
     public static void damageEarth(int hits){
