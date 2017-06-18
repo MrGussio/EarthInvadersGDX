@@ -66,7 +66,7 @@ public class MenuScreen extends Screen implements InputListener {
         sb.begin();
         sb.draw(logo, Game.WIDTH/2-(logo.getTexture().getWidth()*10)/2, Game.HEIGHT-50-logo.getHeight()*10, logo.getWidth()*10, logo.getHeight()*10);
         play.renderSB(sb);
-        betaText.draw(sb, "Beta Release - Copyright 2017 Gussio. All rights reserved. Visit https://gussio.ga/ for more info.", 10, 25);
+        betaText.draw(sb, "Beta Release - Copyright 2017 Gussio. All rights reserved. Visit https://gussio.nl/ for more info.", 10, 25);
         sb.end();
     }
 
