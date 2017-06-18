@@ -1,6 +1,7 @@
 package ga.gussio.ld38.earthinvaders.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -28,9 +29,12 @@ public class Meteorite extends Entity {
     private Rectangle warningRect;
     private long warningTime;
     private Sprite[] img, warning;
+    private Sound sound;
 
-    public Meteorite(Sprite[] textures, Sprite[] warning) {
+    public Meteorite(Sprite[] textures, Sprite[] warning, Sound sound) {
         super(0, 0);
+        this.sound = sound;
+
         Random r = new Random();
         int direction = r.nextInt(360+1);
         health = r.nextInt(2)+3;
@@ -110,5 +114,6 @@ public class Meteorite extends Entity {
         GameScreen.entities.add(new Explosion((int) collision.getXCenter(),
                 (int) collision.getYCenter()));
         GameScreen.entities.remove(this);
+        sound.play(0.6f);
     }
 }

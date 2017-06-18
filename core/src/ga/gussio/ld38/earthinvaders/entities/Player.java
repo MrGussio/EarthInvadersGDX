@@ -1,6 +1,7 @@
 package ga.gussio.ld38.earthinvaders.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -24,11 +25,17 @@ public class Player extends Entity {
 
     private Sprite img;
 
+    private Sound[] shoot;
+
     public Player() {
         super(0, 0);
         this.x = (float) (GameScreen.earth.getXCenter() + radius*Math.sin(angle));
         this.y = (float) (GameScreen.earth.getYCenter() + radius*Math.cos(angle));
         img = new Sprite(new Texture(Gdx.files.internal("player.png")));
+        shoot = new Sound[4];
+        for(int i = 1; i <= shoot.length; i++){
+            shoot[i-1] = Gdx.audio.newSound(Gdx.files.internal("sound/shoot"+i+".wav"));
+        }
     }
 
     @Override
@@ -57,6 +64,8 @@ public class Player extends Entity {
         if(shootInterval == maxShootInterval){
             GameScreen.entities.add(new Bullet(Game.WIDTH/2, Game.HEIGHT/2, angle));
             shootInterval--;
+            Random r = new Random();
+            shoot[r.nextInt(3)+1].play(0.6f);
         }
     }
 

@@ -1,6 +1,8 @@
 package ga.gussio.ld38.earthinvaders.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -54,6 +56,9 @@ public class GameScreen extends Screen implements InputListener {
     private int scoreTimer = 0;
     private boolean appliedScore = false;
 
+    private Music soundtrack;
+    private Sound meteorDestroySound;
+
     public GameScreen() {
         entities.clear();
         camera = new OrthographicCamera();
@@ -86,6 +91,11 @@ public class GameScreen extends Screen implements InputListener {
         exit = new Button(1230, 450, "buttons/exit.png");
         retry = new Button(500, 450, "buttons/retry.png");
 
+        soundtrack = Gdx.audio.newMusic(Gdx.files.internal("sound/soundtrack.wav"));
+        meteorDestroySound = Gdx.audio.newSound(Gdx.files.internal("sound/explosion.wav"));
+
+        soundtrack.setLooping(true);
+        soundtrack.play();
         //generating randomized background
         Random r = new Random();
         background = new Particle[r.nextInt(55-45)+45];
@@ -182,7 +192,7 @@ public class GameScreen extends Screen implements InputListener {
             }
 
             if (System.currentTimeMillis() > spawnTimer) {
-                entities.add(new Meteorite(meteoriteSprites, warningSprites));
+                entities.add(new Meteorite(meteoriteSprites, warningSprites, meteorDestroySound));
                 long dtime = System.currentTimeMillis() - startTime;
                 if (dtime > 10000) {
                     startTime = System.currentTimeMillis();
@@ -224,6 +234,9 @@ public class GameScreen extends Screen implements InputListener {
         health = maxHealth;
         score = 0;
         dmgAnimation = 0;
+        soundtrack.stop();
+        soundtrack.dispose();
+        meteorDestroySound.dispose();
     }
 
     public static void damageEarth(int hits){
