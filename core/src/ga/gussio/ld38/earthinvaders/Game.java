@@ -3,9 +3,12 @@ package ga.gussio.ld38.earthinvaders;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Base64Coder;
+import com.badlogic.gdx.utils.Json;
 
 import java.util.ArrayList;
 
@@ -24,6 +27,9 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	private static ArrayList<InputListener> listeners = new ArrayList<InputListener>();
 
 	private static Screen currentScreen;
+
+	private static SaveFileDescriptor currentDescriptor;
+	private static FileHandle saveFile;
 	
 	@Override
 	public void create () {
@@ -34,6 +40,14 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		Gdx.graphics.requestRendering();
 		Gdx.input.setInputProcessor(this);
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); //fixes red screen bug on startup
+
+		saveFile = Gdx.files.local("bin/saves.dat");
+		if(saveFile.exists()){
+			load();
+		}else{
+			currentDescriptor = newSaveFileDescriptor();
+			save();
+		}
 	}
 
 	@Override
@@ -49,6 +63,33 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	public void dispose () {
 		batch.dispose();
 		currentScreen.dispose();
+	}
+
+	public static void save(){
+		Json json = new Json();
+		saveFile.writeString(Base64Coder.encodeString(json.prettyPrint(currentDescriptor)), false);
+	}
+
+	public static void load(){
+		Json json = new Json();
+		currentDescriptor = json.fromJson(SaveFileDescriptor.class, Base64Coder.decodeString(saveFile.readString()));
+	}
+
+	public static void checkHighscore(int score){
+		if(score > currentDescriptor.highscore) {
+			currentDescriptor.highscore = score;
+			save();
+		}
+	}
+
+	public static int getHighscore(){
+		return currentDescriptor.highscore;
+	}
+
+	public SaveFileDescriptor newSaveFileDescriptor(){
+		SaveFileDescriptor desc = new SaveFileDescriptor();
+		desc.highscore = 0;
+		return desc;
 	}
 
 	@Override

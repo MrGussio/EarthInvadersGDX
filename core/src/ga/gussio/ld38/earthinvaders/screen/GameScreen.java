@@ -35,7 +35,7 @@ public class GameScreen extends Screen implements InputListener {
     public static CopyOnWriteArrayList<Entity> entities = new CopyOnWriteArrayList<Entity>();
     private HashMap<Integer, Integer> pointers = new HashMap<Integer, Integer>();
 
-    public static float maxHealth = 100;
+    public static float maxHealth = 1;
     public static float health = maxHealth;
     private static int dmgAnimation = 0;
 
@@ -52,6 +52,7 @@ public class GameScreen extends Screen implements InputListener {
 
     private static int score = 0;
     private int scoreTimer = 0;
+    private boolean appliedScore = false;
 
     public GameScreen() {
         entities.clear();
@@ -142,8 +143,12 @@ public class GameScreen extends Screen implements InputListener {
         sb.end();
 
         if(health <= 0){
-            GlyphLayout layout = new GlyphLayout(scoreFont, "Game Over! Score: "+score);
-            float fontX = Game.WIDTH/4 + (Game.WIDTH/2 - layout.width) / 2;
+            GlyphLayout gameOverLayout = new GlyphLayout(scoreFont, "Game Over! Score: "+score);
+            float gameOverX = Game.WIDTH/4 + (Game.WIDTH/2 - gameOverLayout.width) / 2;
+
+            GlyphLayout highscoreLayout = new GlyphLayout(scoreFont, "Highscore: "+Game.getHighscore());
+            float highscoreX = Game.WIDTH/4 + (Game.WIDTH/2 - highscoreLayout.width) / 2;
+
             sr.begin();
             sr.set(ShapeRenderer.ShapeType.Filled);
             sr.setColor(Color.GRAY);
@@ -153,7 +158,8 @@ public class GameScreen extends Screen implements InputListener {
             sb.begin();
             retry.renderSB(sb);
             exit.renderSB(sb);
-            scoreFont.draw(sb, "Game Over! Score: "+score, fontX, Game.HEIGHT*7/10);
+            scoreFont.draw(sb, "Game Over! Score: "+score, gameOverX, Game.HEIGHT*7/10);
+            scoreFont.draw(sb, "Highscore: "+Game.getHighscore(), highscoreX, Game.HEIGHT*7/10-60);
             sb.end();
         }
     }
@@ -190,6 +196,10 @@ public class GameScreen extends Screen implements InputListener {
                 scoreTimer = 0;
             }
         }else{
+            if(!appliedScore) {
+                Game.checkHighscore(score);
+                appliedScore = true;
+            }
             retry.tick();
             exit.tick();
 
