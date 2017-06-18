@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import ga.gussio.ld38.earthinvaders.screen.GameScreen;
 import ga.gussio.ld38.earthinvaders.screen.MenuScreen;
 import ga.gussio.ld38.earthinvaders.screen.Screen;
-
+//test
 public class Game extends ApplicationAdapter implements InputProcessor {
 
 	public static int WIDTH = 1920, HEIGHT = 1080;
