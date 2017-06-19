@@ -37,7 +37,7 @@ public class GameScreen extends Screen implements InputListener {
     public static CopyOnWriteArrayList<Entity> entities = new CopyOnWriteArrayList<Entity>();
     private HashMap<Integer, Integer> pointers = new HashMap<Integer, Integer>();
 
-    public static float maxHealth = 1;
+    public static float maxHealth = 100;
     public static float health = maxHealth;
     private static int dmgAnimation = 0;
 
