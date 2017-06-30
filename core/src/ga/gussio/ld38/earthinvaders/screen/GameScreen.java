@@ -3,7 +3,6 @@ package ga.gussio.ld38.earthinvaders.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -95,7 +94,8 @@ public class GameScreen extends Screen implements InputListener {
         meteorDestroySound = Gdx.audio.newSound(Gdx.files.internal("sound/explosion.wav"));
 
         soundtrack.setLooping(true);
-        soundtrack.play();
+        if(!Game.musicMuted())
+            soundtrack.play();
         //generating randomized background
         Random r = new Random();
         background = new Particle[r.nextInt(55-45)+45];

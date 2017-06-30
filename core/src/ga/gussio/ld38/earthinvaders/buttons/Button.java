@@ -15,15 +15,17 @@ public class Button {
     protected String filepath;
     protected Sprite img;
     protected Rectangle collision;
-    public boolean clicked;
+    public boolean clicked, released;
 
     public Button(int x, int y, String filepath) {
         this.x = x;
         this.y = y;
         this.filepath = filepath;
-        img = new Sprite(new Texture(Gdx.files.internal(filepath)));
-        this.width = img.getTexture().getWidth();
-        this.height = img.getTexture().getHeight();
+        img = filepath != "" ? new Sprite(new Texture(Gdx.files.internal(filepath))) : null;
+        if(img != null) {
+            this.width = img.getTexture().getWidth();
+            this.height = img.getTexture().getHeight();
+        }
         this.rotation = 0;
         collision = new Rectangle(x, y, width, height);
     }
@@ -32,6 +34,14 @@ public class Button {
         this(x, y, filepath);
         this.width = width;
         this.height = height;
+    }
+
+    public Button(int x, int y, Sprite sprite){
+        this(x, y, "");
+        img = sprite;
+        this.width = img.getTexture().getWidth();
+        this.height = img.getTexture().getHeight();
+        collision.set(x, y, width, height);
     }
 
     public Button(int x, int y, int width, int height, int rotationInDegr, String filepath) {
@@ -107,9 +117,20 @@ public class Button {
         return filepath;
     }
 
+    public Sprite getSprite(){
+        return img;
+    }
+
+    public void setSprite(Sprite sprite) {
+        img = sprite;
+        this.width = img.getTexture().getWidth();
+        this.height = img.getTexture().getHeight();
+    }
+
     public boolean click(Vector2 p) {
         if (collision.contains(p)) {
             this.clicked = true;
+            this.released = false;
             return true;
         }
         return false;
@@ -118,6 +139,7 @@ public class Button {
     public boolean release(Vector2 p){
         if(collision.contains((p))){
             this.clicked = false;
+            this.released = true;
             return true;
         }
         return false;
@@ -130,4 +152,5 @@ public class Button {
         }
         return false;
     }
+
 }

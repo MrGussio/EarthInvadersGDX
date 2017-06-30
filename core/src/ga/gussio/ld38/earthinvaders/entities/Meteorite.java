@@ -114,6 +114,7 @@ public class Meteorite extends Entity {
         GameScreen.entities.add(new Explosion((int) collision.getXCenter(),
                 (int) collision.getYCenter()));
         GameScreen.entities.remove(this);
-        sound.play(0.6f);
+        if(!Game.musicMuted())
+            sound.play(0.6f);
     }
 }

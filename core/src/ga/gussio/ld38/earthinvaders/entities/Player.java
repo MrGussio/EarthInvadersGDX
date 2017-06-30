@@ -65,7 +65,8 @@ public class Player extends Entity {
             GameScreen.entities.add(new Bullet(Game.WIDTH/2, Game.HEIGHT/2, angle));
             shootInterval--;
             Random r = new Random();
-            shoot[r.nextInt(3)+1].play(0.6f);
+            if(!Game.musicMuted())
+                shoot[r.nextInt(3)+1].play(0.6f);
         }
     }
 

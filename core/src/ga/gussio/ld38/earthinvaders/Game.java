@@ -33,14 +33,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	
 	@Override
 	public void create () {
-		aspectRatio = (float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth();
-		batch = new SpriteBatch();
-		sr = new ShapeRenderer();
-		setCurrentScreen(new MenuScreen());
-		Gdx.graphics.requestRendering();
-		Gdx.input.setInputProcessor(this);
-		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); //fixes red screen bug on startup
-
 		saveFile = Gdx.files.local("bin/saves.dat");
 		if(saveFile.exists()){
 			load();
@@ -48,6 +40,14 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			currentDescriptor = newSaveFileDescriptor();
 			save();
 		}
+		aspectRatio = (float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth();
+		batch = new SpriteBatch();
+		sr = new ShapeRenderer();
+		setCurrentScreen(new MenuScreen());
+		Gdx.graphics.requestRendering();
+		Gdx.input.setInputProcessor(this);
+		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); //fixes red screen bug on startup
+        Gdx.input.setCatchBackKey(true);
 	}
 
 	@Override
@@ -89,6 +89,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	public SaveFileDescriptor newSaveFileDescriptor(){
 		SaveFileDescriptor desc = new SaveFileDescriptor();
 		desc.highscore = 0;
+		desc.musicMuted = false;
 		return desc;
 	}
 
@@ -149,5 +150,13 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		currentScreen = s;
 		listeners.add(currentScreen);
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+	}
+
+	public static void setMuted(boolean muted){
+		currentDescriptor.musicMuted = muted;
+	}
+
+	public static boolean musicMuted(){
+		return currentDescriptor.musicMuted;
 	}
 }
