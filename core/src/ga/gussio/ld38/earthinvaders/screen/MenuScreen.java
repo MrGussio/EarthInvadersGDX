@@ -1,6 +1,7 @@
 package ga.gussio.ld38.earthinvaders.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -94,6 +95,10 @@ public class MenuScreen extends Screen implements InputListener {
         }
         play.tick();
         music.tick();
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
+            Gdx.app.exit();
+        }
     }
 
     @Override

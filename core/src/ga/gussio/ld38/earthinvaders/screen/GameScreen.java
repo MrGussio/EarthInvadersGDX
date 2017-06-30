@@ -1,8 +1,10 @@
 package ga.gussio.ld38.earthinvaders.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.Input.Keys;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -44,7 +47,7 @@ public class GameScreen extends Screen implements InputListener {
     private BitmapFont scoreFont;
     private Particle[] background;
 
-    private Button leftButton, rightButton, exit, retry;
+    private Button leftButton, rightButton, exit, pauseExit, retry, resume;
     private Player player;
 
     private long spawnTimer;
@@ -57,6 +60,8 @@ public class GameScreen extends Screen implements InputListener {
 
     private Music soundtrack;
     private Sound meteorDestroySound;
+
+    private boolean paused = false;
 
     public GameScreen() {
         entities.clear();
@@ -88,7 +93,9 @@ public class GameScreen extends Screen implements InputListener {
         rightButton = new Button(150, 10, "buttons/control_button.png");
 
         exit = new Button(1230, 450, "buttons/exit.png");
+        pauseExit = new Button(1230, 450, "buttons/exit.png");
         retry = new Button(500, 450, "buttons/retry.png");
+        resume = new Button(500, 450, "buttons/resume.png");
 
         soundtrack = Gdx.audio.newMusic(Gdx.files.internal("sound/soundtrack.wav"));
         meteorDestroySound = Gdx.audio.newSound(Gdx.files.internal("sound/explosion.wav"));
@@ -172,55 +179,93 @@ public class GameScreen extends Screen implements InputListener {
             scoreFont.draw(sb, "Highscore: "+Game.getHighscore(), highscoreX, Game.HEIGHT*7/10-60);
             sb.end();
         }
+
+        if(paused){
+            sr.begin();
+            sr.set(ShapeRenderer.ShapeType.Filled);
+            sr.setColor(Color.GRAY);
+            sr.rect(Game.WIDTH/4, Game.HEIGHT*4/10, Game.WIDTH/2, Game.HEIGHT*4/10);
+            sr.end();
+
+            GlyphLayout textLayout = new GlyphLayout(scoreFont, "Game paused.");
+            float textX = Game.WIDTH/4 + (Game.WIDTH/2 - textLayout.width) / 2;
+            sb.begin();
+            scoreFont.draw(sb, "Game paused.", textX, Game.HEIGHT*7/10);
+            resume.renderSB(sb);
+            pauseExit.renderSB(sb);
+            sb.end();
+        }
     }
 
     @Override
     public void tick() {
-        if(health > 0) {
-            if (leftButton.clicked)
-                player.setDirection(-1);
-            else if (rightButton.clicked)
-                player.setDirection(1);
-            else
-                player.setDirection(0);
-            for (Entity e : entities) {
-                e.tick();
-            }
-            if (dmgAnimation > 0) {
-                health--;
-                dmgAnimation--;
-            }
-
-            if (System.currentTimeMillis() > spawnTimer) {
-                entities.add(new Meteorite(meteoriteSprites, warningSprites, meteorDestroySound));
-                long dtime = System.currentTimeMillis() - startTime;
-                if (dtime > 10000) {
-                    startTime = System.currentTimeMillis();
+        if(!paused) {
+            if (health > 0) {
+                if (leftButton.clicked)
+                    player.setDirection(-1);
+                else if (rightButton.clicked)
+                    player.setDirection(1);
+                else
+                    player.setDirection(0);
+                for (Entity e : entities) {
+                    e.tick();
                 }
-                spawnTimer = System.currentTimeMillis() + spawnFactor;
-            }
+                if (dmgAnimation > 0) {
+                    health--;
+                    dmgAnimation--;
+                }
 
-            scoreTimer++;
-            if (scoreTimer > 60) {
-                score++;
-                scoreTimer = 0;
+                if (System.currentTimeMillis() > spawnTimer) {
+                    entities.add(new Meteorite(meteoriteSprites, warningSprites, meteorDestroySound));
+                    long dtime = System.currentTimeMillis() - startTime;
+                    if (dtime > 10000) {
+                        startTime = System.currentTimeMillis();
+                    }
+                    spawnTimer = System.currentTimeMillis() + spawnFactor;
+                }
+
+                scoreTimer++;
+                if (scoreTimer > 60) {
+                    score++;
+                    scoreTimer = 0;
+                }
+            } else {
+                if (!appliedScore) {
+                    Game.checkHighscore(score);
+                    appliedScore = true;
+                }
+                retry.tick();
+                exit.tick();
+
+                if (retry.clicked) {
+                    retry.clicked = false;
+                    Game.setCurrentScreen(new GameScreen());
+                }
+
+                if (exit.clicked) {
+                    exit.clicked = false;
+                    Game.setCurrentScreen(new MenuScreen());
+                }
             }
         }else{
-            if(!appliedScore) {
-                Game.checkHighscore(score);
-                appliedScore = true;
+            if(resume.clicked){
+                resume.clicked = false;
+                paused = false;
+                soundtrack.play();
             }
-            retry.tick();
-            exit.tick();
-
-            if(retry.clicked){
-                retry.clicked = false;
-                Game.setCurrentScreen(new GameScreen());
-            }
-
-            if(exit.clicked){
-                exit.clicked = false;
+            if(pauseExit.clicked){
+                pauseExit.clicked = false;
                 Game.setCurrentScreen(new MenuScreen());
+            }
+        }
+
+        if(Gdx.input.isKeyJustPressed(Keys.BACK)){
+            if(paused){
+                Game.setCurrentScreen(new MenuScreen());
+                paused = false;
+            }else {
+                paused = true;
+                soundtrack.pause();
             }
         }
     }
@@ -255,6 +300,7 @@ public class GameScreen extends Screen implements InputListener {
         if(!left &! right){//didnt hit a button
             player.shoot();
         }
+        System.out.println(pointer);
         if(left)
             pointers.put(pointer, 1);
         else if(right)
@@ -262,8 +308,11 @@ public class GameScreen extends Screen implements InputListener {
         else
             pointers.put(pointer, 0);
 
+
         retry.click(new Vector2(coords.x, coords.y));
         exit.click(new Vector2(coords.x, coords.y));
+        pauseExit.click(new Vector2(coords.x, coords.y));
+        resume.click(new Vector2(coords.x, coords.y));
     }
 
     @Override
@@ -282,8 +331,11 @@ public class GameScreen extends Screen implements InputListener {
             }
             pointers.remove(pointer);
         }
+
         retry.release(new Vector2(coords.x, coords.y));
         exit.release(new Vector2(coords.x, coords.y));
+        pauseExit.release(new Vector2(coords.x, coords.y));
+        resume.release(new Vector2(coords.x, coords.y));
     }
 
     @Override
@@ -291,13 +343,9 @@ public class GameScreen extends Screen implements InputListener {
         Vector3 coords = camera.unproject(new Vector3(screenX, screenY, 0));
         boolean left = leftButton.drag(new Vector2(coords.x, coords.y));
         boolean right = rightButton.drag(new Vector2(coords.x, coords.y));
-        int currentValue;
-        if(pointers.containsKey(pointers)) {
-            currentValue = pointers.get(pointer);
+        if(pointers.containsKey(pointer)) {
+            int currentValue = pointers.get(pointer);
             pointers.remove(pointer);
-        }else{
-            currentValue = 0;
-        }
             if (left) {
                 pointers.put(pointer, 1);
                 leftButton.clicked = true;
@@ -313,7 +361,10 @@ public class GameScreen extends Screen implements InputListener {
                 else if (currentValue == 2)
                     rightButton.clicked = false;
             }
+        }
         retry.drag(new Vector2(coords.x, coords.y));
         exit.drag(new Vector2(coords.x, coords.y));
+        pauseExit.click(new Vector2(coords.x, coords.y));
+        resume.click(new Vector2(coords.x, coords.y));
     }
 }
