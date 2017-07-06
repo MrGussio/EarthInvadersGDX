@@ -284,6 +284,16 @@ public class GameScreen extends Screen implements InputListener {
         meteorDestroySound.dispose();
     }
 
+    @Override
+    public void pause() {
+        paused = true;
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
     public static void damageEarth(int hits){
         dmgAnimation+=hits;
     }

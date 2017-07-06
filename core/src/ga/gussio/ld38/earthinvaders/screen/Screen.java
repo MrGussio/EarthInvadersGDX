@@ -17,5 +17,8 @@ public abstract class Screen implements InputListener {
     public abstract void render(SpriteBatch batch, ShapeRenderer sr);
     public abstract void tick();
     public abstract void dispose();
+    public abstract void pause();
+    public abstract void resume();
+
 
 }

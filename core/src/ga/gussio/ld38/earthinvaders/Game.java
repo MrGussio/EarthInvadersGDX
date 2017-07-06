@@ -65,6 +65,16 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		currentScreen.dispose();
 	}
 
+	@Override
+	public void pause() {
+        currentScreen.pause();
+	}
+
+	@Override
+	public void resume() {
+        currentScreen.resume();
+	}
+
 	public static void save(){
 		Json json = new Json();
 		saveFile.writeString(Base64Coder.encodeString(json.prettyPrint(currentDescriptor)), false);

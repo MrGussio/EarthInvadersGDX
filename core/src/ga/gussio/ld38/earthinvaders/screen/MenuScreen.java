@@ -102,6 +102,16 @@ public class MenuScreen extends Screen implements InputListener {
     }
 
     @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
     public void dispose() {
         play.dispose();
         logo.getTexture().dispose();
