@@ -321,7 +321,7 @@ public class GameScreen extends Screen implements InputListener {
         Vector3 coords = camera.unproject(new Vector3(screenX, screenY, 0));
         boolean left = leftButton.click(new Vector2(coords.x, coords.y));
         boolean right = rightButton.click(new Vector2(coords.x, coords.y));
-        if(!left &! right){//didnt hit a button
+        if(!left &! right &! paused){//didnt hit a button and game not paused
             player.shoot();
         }
         System.out.println(pointer);
