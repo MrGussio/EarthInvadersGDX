@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import ga.gussio.ld38.earthinvaders.screen.GameScreen;
 import ga.gussio.ld38.earthinvaders.screen.MenuScreen;
 import ga.gussio.ld38.earthinvaders.screen.Screen;
+import ga.gussio.ld38.earthinvaders.screen.SplashScreen;
+
 //test
 public class Game extends ApplicationAdapter implements InputProcessor {
 
@@ -43,7 +45,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		aspectRatio = (float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth();
 		batch = new SpriteBatch();
 		sr = new ShapeRenderer();
-		setCurrentScreen(new MenuScreen());
+		setCurrentScreen(new SplashScreen());
 		Gdx.graphics.requestRendering();
 		Gdx.input.setInputProcessor(this);
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); //fixes red screen bug on startup
