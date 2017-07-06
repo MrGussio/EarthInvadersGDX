@@ -44,10 +44,11 @@ public class GameScreen extends Screen implements InputListener {
     private static int dmgAnimation = 0;
 
     private Sprite[] meteoriteSprites, warningSprites;
+    private Sprite musicMuted, musicUnmuted;
     private BitmapFont scoreFont;
     private Particle[] background;
 
-    private Button leftButton, rightButton, exit, pauseExit, retry, resume;
+    private Button leftButton, rightButton, exit, pauseExit, retry, resume, music;
     private Player player;
 
     private long spawnTimer;
@@ -72,6 +73,8 @@ public class GameScreen extends Screen implements InputListener {
         camera.update();
 
         earthTexture = new Sprite(new Texture(Gdx.files.internal("world.png")));
+        musicMuted = new Sprite(new Texture(Gdx.files.internal("buttons/music_muted.png")));
+        musicUnmuted = new Sprite(new Texture(Gdx.files.internal("buttons/music_unmuted.png")));
         earth = new Circle((float) (Game.WIDTH/2-Game.HEIGHT*0.2), (float) (Game.HEIGHT/2-Game.HEIGHT*0.2), (float) (Game.HEIGHT*0.2));
         this.player = new Player();
         entities.add(player);
@@ -96,6 +99,8 @@ public class GameScreen extends Screen implements InputListener {
         pauseExit = new Button(1230, 450, "buttons/exit.png");
         retry = new Button(500, 450, "buttons/retry.png");
         resume = new Button(500, 450, "buttons/resume.png");
+        music = new Button(Game.WIDTH-130, 15, Game.musicMuted() ? musicMuted : musicUnmuted);
+        music.setScale(4f);
 
         soundtrack = Gdx.audio.newMusic(Gdx.files.internal("sound/soundtrack.wav"));
         meteorDestroySound = Gdx.audio.newSound(Gdx.files.internal("sound/explosion.wav"));
@@ -193,6 +198,7 @@ public class GameScreen extends Screen implements InputListener {
             scoreFont.draw(sb, "Game paused.", textX, Game.HEIGHT*7/10);
             resume.renderSB(sb);
             pauseExit.renderSB(sb);
+            music.renderSB(sb);
             sb.end();
         }
     }
@@ -251,11 +257,19 @@ public class GameScreen extends Screen implements InputListener {
             if(resume.clicked){
                 resume.clicked = false;
                 paused = false;
-                soundtrack.play();
+                if(!Game.musicMuted())
+                    soundtrack.play();
             }
             if(pauseExit.clicked){
                 pauseExit.clicked = false;
                 Game.setCurrentScreen(new MenuScreen());
+            }
+            if(music.released){
+                music.setSprite(Game.musicMuted() ? musicUnmuted : musicMuted);
+                music.setScale(4f);
+                Game.setMuted(!Game.musicMuted());
+                Game.save();
+                music.released = false;
             }
         }
 
@@ -317,12 +331,15 @@ public class GameScreen extends Screen implements InputListener {
             pointers.put(pointer, 2);
         else
             pointers.put(pointer, 0);
-
-
-        retry.click(new Vector2(coords.x, coords.y));
-        exit.click(new Vector2(coords.x, coords.y));
-        pauseExit.click(new Vector2(coords.x, coords.y));
-        resume.click(new Vector2(coords.x, coords.y));
+        if(health <= 0) {
+            retry.click(new Vector2(coords.x, coords.y));
+            exit.click(new Vector2(coords.x, coords.y));
+        }
+        if(paused) {
+            pauseExit.click(new Vector2(coords.x, coords.y));
+            resume.click(new Vector2(coords.x, coords.y));
+            music.click(new Vector2(coords.x, coords.y));
+        }
     }
 
     @Override
@@ -341,11 +358,15 @@ public class GameScreen extends Screen implements InputListener {
             }
             pointers.remove(pointer);
         }
-
-        retry.release(new Vector2(coords.x, coords.y));
-        exit.release(new Vector2(coords.x, coords.y));
-        pauseExit.release(new Vector2(coords.x, coords.y));
-        resume.release(new Vector2(coords.x, coords.y));
+        if(health <= 0) {
+            retry.release(new Vector2(coords.x, coords.y));
+            exit.release(new Vector2(coords.x, coords.y));
+        }
+        if(paused) {
+            pauseExit.release(new Vector2(coords.x, coords.y));
+            resume.release(new Vector2(coords.x, coords.y));
+            music.release(new Vector2(coords.x, coords.y));
+        }
     }
 
     @Override
@@ -353,7 +374,7 @@ public class GameScreen extends Screen implements InputListener {
         Vector3 coords = camera.unproject(new Vector3(screenX, screenY, 0));
         boolean left = leftButton.drag(new Vector2(coords.x, coords.y));
         boolean right = rightButton.drag(new Vector2(coords.x, coords.y));
-        if(pointers.containsKey(pointer)) {
+        if (pointers.containsKey(pointer)) {
             int currentValue = pointers.get(pointer);
             pointers.remove(pointer);
             if (left) {
@@ -372,9 +393,14 @@ public class GameScreen extends Screen implements InputListener {
                     rightButton.clicked = false;
             }
         }
-        retry.drag(new Vector2(coords.x, coords.y));
-        exit.drag(new Vector2(coords.x, coords.y));
-        pauseExit.click(new Vector2(coords.x, coords.y));
-        resume.click(new Vector2(coords.x, coords.y));
+        if (health <= 0) {
+            retry.drag(new Vector2(coords.x, coords.y));
+            exit.drag(new Vector2(coords.x, coords.y));
+        }
+        if (paused){
+            pauseExit.drag(new Vector2(coords.x, coords.y));
+            resume.drag(new Vector2(coords.x, coords.y));
+            music.drag(new Vector2(coords.x, coords.y));
+        }
     }
 }
