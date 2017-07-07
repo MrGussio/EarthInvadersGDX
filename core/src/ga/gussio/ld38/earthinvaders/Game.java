@@ -17,7 +17,6 @@ import ga.gussio.ld38.earthinvaders.screen.MenuScreen;
 import ga.gussio.ld38.earthinvaders.screen.Screen;
 import ga.gussio.ld38.earthinvaders.screen.SplashScreen;
 
-//test
 public class Game extends ApplicationAdapter implements InputProcessor {
 
 	public static int WIDTH = 1920, HEIGHT = 1080;
