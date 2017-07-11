@@ -19,7 +19,7 @@ android {
     }
     defaultConfig {
         applicationId "ga.gussio.ld38.earthinvaders"
-        minSdkVersion 8
+        minSdkVersion 14
         targetSdkVersion 24
     }
 }
