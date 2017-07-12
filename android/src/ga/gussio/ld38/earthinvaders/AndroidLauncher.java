@@ -1,7 +1,10 @@
 	package ga.gussio.ld38.earthinvaders;
 
+	import android.content.Intent;
 	import android.graphics.Bitmap;
 	import android.graphics.BitmapFactory;
+	import android.net.Uri;
+	import android.os.AsyncTask;
 	import android.os.Bundle;
 	import android.support.v4.app.FragmentActivity;
 	import android.view.View;
@@ -27,6 +30,12 @@
 	public class AndroidLauncher extends FragmentActivity implements AndroidFragmentApplication.Callbacks {
 
 		private AppnextAPI api;
+
+		private TextView adTitle;
+		private TextView adRating;
+		private ImageView adIcon;
+		private Button adButton;
+		private ImageView privacyButton;
 
 		@Override
 		public void onCreate (Bundle savedInstanceState) {
@@ -64,26 +73,37 @@
 				}
 				@Override
 				public void onAdsLoaded(ArrayList<AppnextAd> ads) {
-					AppnextAd firstAd = ads.get(0);
-					TextView adTitle = (TextView) findViewById(R.id.adTitle);
-					TextView adDescription = (TextView) findViewById(R.id.adDescription);
-					ImageView adIcon = (ImageView) findViewById(R.id.adIcon);
-					Button adButton = (Button) findViewById(R.id.installButton);
-
+					final AppnextAd firstAd = ads.get(0);
+					adTitle = (TextView) findViewById(R.id.title);
+					adRating = (TextView) findViewById(R.id.rating);
+					adIcon = (ImageView) findViewById(R.id.icon);
+					adButton = (Button) findViewById(R.id.install);
+					privacyButton = (ImageView) findViewById(R.id.privacy);
 					try {
-						URL url = new URL(firstAd.getImageURL());
-						Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+//						Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+						new DownloadImageTask().execute(firstAd.getImageURL());
 						adTitle.setText(firstAd.getAdTitle());
-						adDescription.setText(firstAd.getAdDescription());
-						adIcon.setImageBitmap(bmp);
+						adRating.setText(firstAd.getStoreRating());
 						adButton.setText(firstAd.getButtonText());
 						findViewById(R.id.ad_container).setVisibility(View.VISIBLE);
-					} catch (MalformedURLException e) {
-						e.printStackTrace();
-					} catch (IOException e){
+						api.adImpression(firstAd);
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 
+					adButton.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							api.adClicked(firstAd);
+						}
+					});
+
+					privacyButton.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							api.privacyClicked(firstAd);
+						}
+					});
 				}
 			});
 			api.setCreativeType(AppnextAPI.TYPE_STATIC);
@@ -102,4 +122,25 @@
 		public void exit() {
 
 		}
+		private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+
+			@Override
+			protected Bitmap doInBackground(String[] params) {
+				try {
+					URL url = new URL(params[0]);
+					Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+					return bmp;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Bitmap bitmap) {
+				adIcon.setImageBitmap(bitmap);
+			}
+		}
 	}
+
+
