@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ga.gussio.ld38.earthinvaders"
-    android:versionCode="4"
-    android:versionName="Beta 0.1.3" >
+    android:versionCode="5"
+    android:versionName="Beta 0.1.4" >
 
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="24" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

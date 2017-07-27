@@ -95,7 +95,10 @@ public class GameScreen extends Screen implements InputListener {
         scoreFont.getData().setScale(0.8f);
 
         leftButton = new Button(10, 10, 180, "buttons/control_button.png");
-        rightButton = new Button(150, 10, "buttons/control_button.png");
+        rightButton = new Button(210, 10, "buttons/control_button.png");
+
+        leftButton.setScale(1.5f);
+        rightButton.setScale(1.5f);
 
         exit = new Button(1230, 450, "buttons/exit.png");
         pauseExit = new Button(1230, 450, "buttons/exit.png");
