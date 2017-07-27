@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import ga.gussio.ld38.earthinvaders.Advertisements;
 import ga.gussio.ld38.earthinvaders.Game;
 import ga.gussio.ld38.earthinvaders.InputListener;
 import ga.gussio.ld38.earthinvaders.buttons.Button;
@@ -63,6 +64,7 @@ public class GameScreen extends Screen implements InputListener {
     private Sound meteorDestroySound;
 
     private boolean paused = false;
+    private boolean showedAds = false;
 
     public GameScreen() {
         entities.clear();
@@ -251,6 +253,11 @@ public class GameScreen extends Screen implements InputListener {
                 if (exit.clicked) {
                     exit.clicked = false;
                     Game.setCurrentScreen(new MenuScreen());
+                }
+
+                if(!showedAds){
+                    showedAds = true;
+                    Game.ads.showAds();
                 }
             }
         }else{

@@ -22,8 +22,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	public static int WIDTH = 1920, HEIGHT = 1080;
 	public static float aspectRatio;
 
-	SpriteBatch batch;
-	ShapeRenderer sr;
+	private SpriteBatch batch;
+	private ShapeRenderer sr;
 
 	private static ArrayList<InputListener> listeners = new ArrayList<InputListener>();
 
@@ -31,7 +31,13 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 	private static SaveFileDescriptor currentDescriptor;
 	private static FileHandle saveFile;
-	
+
+	public static Advertisements ads;
+
+	public Game(Advertisements ads){
+		this.ads = ads;
+	}
+
 	@Override
 	public void create () {
 		saveFile = Gdx.files.local("bin/saves.dat");

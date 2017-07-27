@@ -1,9 +1,7 @@
 	package ga.gussio.ld38.earthinvaders;
 
-	import android.content.Intent;
 	import android.graphics.Bitmap;
 	import android.graphics.BitmapFactory;
-	import android.net.Uri;
 	import android.os.AsyncTask;
 	import android.os.Bundle;
 	import android.support.v4.app.FragmentActivity;
@@ -18,16 +16,12 @@
 	import com.appnext.base.Appnext;
 	import com.appnext.core.AppnextError;
 	import com.badlogic.gdx.Gdx;
-	import com.badlogic.gdx.backends.android.AndroidApplication;
-	import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 	import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 
-	import java.io.IOException;
-	import java.net.MalformedURLException;
 	import java.net.URL;
 	import java.util.ArrayList;
 
-	public class AndroidLauncher extends FragmentActivity implements AndroidFragmentApplication.Callbacks {
+	public class AndroidLauncher extends FragmentActivity implements AndroidFragmentApplication.Callbacks, Advertisements {
 
 		private AppnextAPI api;
 
@@ -37,6 +31,8 @@
 		private Button adButton;
 		private ImageView privacyButton;
 
+		private View adContainer;
+
 		@Override
 		public void onCreate (Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
@@ -44,14 +40,15 @@
 			setContentView(R.layout.layout);
 
 			// Create libgdx fragment
-			GameFragment libgdxFragment = new GameFragment();
+			GameFragment libgdxFragment = new GameFragment(this);
 
 			// Put it inside the framelayout (which is defined in the layout.xml file).
 			getSupportFragmentManager().beginTransaction().
 					add(R.id.content_framelayout, libgdxFragment).
 					commit();
 
-			findViewById(R.id.ad_container).setVisibility(View.VISIBLE);
+			adContainer = findViewById(R.id.ad_container);
+			adContainer.setVisibility(View.INVISIBLE);
 
             Appnext.init(getApplicationContext());
 			api = new AppnextAPI(this, "de6b4164-2e42-4f27-a7c3-c86754d9bc9c");
@@ -85,7 +82,7 @@
 						adTitle.setText(firstAd.getAdTitle());
 						adRating.setText(firstAd.getStoreRating());
 						adButton.setText(firstAd.getButtonText());
-						findViewById(R.id.ad_container).setVisibility(View.VISIBLE);
+                        adContainer.setVisibility(View.VISIBLE);
 						api.adImpression(firstAd);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -107,13 +104,12 @@
 				}
 			});
 			api.setCreativeType(AppnextAPI.TYPE_STATIC);
-			api.loadAds(new AppnextAdRequest().setCount(1));
 
 			Button clickButton = (Button) findViewById(R.id.closeButton);
 			clickButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					findViewById(R.id.ad_container).setVisibility(View.INVISIBLE);
+					adContainer.setVisibility(View.INVISIBLE);
 				}
 			});
 		}
@@ -122,6 +118,12 @@
 		public void exit() {
 
 		}
+
+		@Override
+		public void showAds() {
+            api.loadAds(new AppnextAdRequest().setCount(1));
+		}
+
 		private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
 			@Override
