@@ -63,6 +63,12 @@ public class Sentry extends Entity {
 //        angle+= Math.toRadians(1.5);
     }
 
+    @Override
+    public void dispose() {
+        img.getTexture().dispose();
+
+    }
+
     public void selectNewTarget(){
         view.setOrigin(x, y);
         view.setRotation((float) -Math.toDegrees(angle));

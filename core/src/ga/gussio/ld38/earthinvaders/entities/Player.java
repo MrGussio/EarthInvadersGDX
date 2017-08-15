@@ -60,6 +60,14 @@ public class Player extends Entity {
         }
     }
 
+    @Override
+    public void dispose() {
+        img.getTexture().dispose();
+        for(int i = 0; i < shoot.length; i++){
+            shoot[i].dispose();
+        }
+    }
+
     public void shoot(){
         if(shootInterval == maxShootInterval){
             GameScreen.entities.add(new Bullet(Game.WIDTH/2, Game.HEIGHT/2, angle));

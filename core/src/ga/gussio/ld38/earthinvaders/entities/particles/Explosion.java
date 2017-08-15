@@ -49,4 +49,9 @@ public class Explosion extends Entity {
                 particles.remove(p);
         }
     }
+
+    @Override
+    public void dispose() {
+        particles.clear();
+    }
 }

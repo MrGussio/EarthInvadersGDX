@@ -104,6 +104,10 @@ public class Meteorite extends Entity {
         rotation += rotationSpeed;
     }
 
+    @Override
+    public void dispose() {
+    }
+
     public void damage(){
         health--;
         if(health <= 0){
@@ -117,6 +121,7 @@ public class Meteorite extends Entity {
         GameScreen.entities.remove(this);
         if(!Game.musicMuted())
             sound.play(0.6f);
+        dispose();
     }
 
     public float getHealth(){

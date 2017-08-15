@@ -302,6 +302,10 @@ public class GameScreen extends Screen implements InputListener {
             meteoriteSprites[i].getTexture().dispose();
         }
 
+        for(Entity e : entities){
+            e.dispose();
+        }
+
         health = maxHealth;
         score = 0;
         dmgAnimation = 0;

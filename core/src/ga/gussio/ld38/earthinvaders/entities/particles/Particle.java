@@ -44,6 +44,11 @@ public class Particle extends Entity {
         y += speed * Math.sin(Math.toRadians(dir));
     }
 
+    @Override
+    public void dispose() {
+
+    }
+
     public boolean hasExpired(){
         if(expireTime < 0)
             return false;

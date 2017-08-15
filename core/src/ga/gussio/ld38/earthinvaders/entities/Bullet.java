@@ -50,6 +50,11 @@ public class Bullet extends Entity {
         }
     }
 
+    @Override
+    public void dispose() {
+
+    }
+
     public void checkCollision(){
         for(Entity e : GameScreen.entities) {
             if (e instanceof Meteorite) {

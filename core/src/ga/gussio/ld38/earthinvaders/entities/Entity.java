@@ -15,6 +15,7 @@ public abstract class Entity {
     public abstract void renderSB(SpriteBatch sr);
     public abstract void renderSR(ShapeRenderer sr);
     public abstract void tick();
+    public abstract void dispose();
 
     public float getX() {
         return x;
