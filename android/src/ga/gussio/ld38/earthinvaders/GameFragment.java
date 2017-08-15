@@ -9,7 +9,11 @@ import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 
 public class GameFragment extends AndroidFragmentApplication{
 
-    private final Advertisements ads;
+    private Advertisements ads;
+
+    public GameFragment(){
+
+    }
 
     public GameFragment(Advertisements ads){
         this.ads = ads;
@@ -18,7 +22,6 @@ public class GameFragment extends AndroidFragmentApplication{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        // return the GLSurfaceView on which libgdx is drawing game stuff
         return initializeForView(new Game(ads));
     }
 }

@@ -22,6 +22,9 @@ android {
         minSdkVersion 14
         targetSdkVersion 24
     }
+    lintOptions {
+        checkReleaseBuilds false
+    }
 }
 
 
