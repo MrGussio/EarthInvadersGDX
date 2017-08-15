@@ -53,7 +53,7 @@ public class Sentry extends Entity {
         if(target != null){
             if(target.getHealth() <= 0 || !view.contains(new Vector2(target.getX(), target.getY()))){ // check if target is still in range, if not so remove target.
                 target = null;
-            }else if(lastFire+fireRate < System.currentTimeMillis()){
+            }else if(lastFire+fireRate < System.currentTimeMillis() &! target.isStillInWarningTime()){
                 lastFire = System.currentTimeMillis();
                 GameScreen.entities.add(new ChaseBullet(Game.WIDTH/2, Game.HEIGHT/2, angle, target));
             }

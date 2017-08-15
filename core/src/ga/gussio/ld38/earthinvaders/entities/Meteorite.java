@@ -30,6 +30,7 @@ public class Meteorite extends Entity {
     private long warningTime;
     private Sprite[] img, warning;
     private Sound sound;
+    private boolean inWarningTime = true;
 
     public Meteorite(Sprite[] textures, Sprite[] warning, Sound sound) {
         super(0, 0);
@@ -91,6 +92,7 @@ public class Meteorite extends Entity {
         if(System.currentTimeMillis()>warningTime) {
             x += velX;
             y += velY;
+            inWarningTime = false;
         }
         collision.setX(x);
         collision.setY(y);
@@ -119,5 +121,9 @@ public class Meteorite extends Entity {
 
     public float getHealth(){
         return health;
+    }
+
+    public boolean isStillInWarningTime(){
+        return inWarningTime;
     }
 }
