@@ -44,13 +44,6 @@ public class Sentry extends Entity {
     public void renderSR(ShapeRenderer sr) {
         sr.setColor(Color.RED);
         sr.polygon(view.getTransformedVertices());
-
-        /*
-        PRE-VAKANTIE UPDATELOG:
-        - Range indicator met range van 1080 werkt nu (nog niet bij selectTarget(), alleen visuele weergave)
-        - Je moet even de minDistance precies uitrekenen (x, y coördinaat van sentry aftrekken van width/height, dan pythagoras geeft je minDistance
-        - ChaseBullet moet afgemaakt worden (met als argument een Meteorite, en ervoor zorgen dat de velX velY richting dat target gaan als een homing missile)
-         */
     }
 
     @Override
