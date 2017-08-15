@@ -30,6 +30,7 @@ import ga.gussio.ld38.earthinvaders.buttons.Button;
 import ga.gussio.ld38.earthinvaders.entities.Entity;
 import ga.gussio.ld38.earthinvaders.entities.Meteorite;
 import ga.gussio.ld38.earthinvaders.entities.Player;
+import ga.gussio.ld38.earthinvaders.entities.Sentry;
 import ga.gussio.ld38.earthinvaders.entities.particles.Particle;
 import ga.gussio.ld38.earthinvaders.math.Circle;
 
@@ -80,6 +81,7 @@ public class GameScreen extends Screen implements InputListener {
         earth = new Circle((float) (Game.WIDTH/2-Game.HEIGHT*0.2), (float) (Game.HEIGHT/2-Game.HEIGHT*0.2), (float) (Game.HEIGHT*0.2));
         this.player = new Player();
         entities.add(player);
+        entities.add(new Sentry());
         Texture full = new Texture(Gdx.files.internal("meteorite.png"));
         meteoriteSprites = new Sprite[4];
         for(int i = 0; i < meteoriteSprites.length; i++){

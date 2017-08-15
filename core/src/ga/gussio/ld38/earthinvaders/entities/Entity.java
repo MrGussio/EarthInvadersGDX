@@ -15,4 +15,12 @@ public abstract class Entity {
     public abstract void renderSB(SpriteBatch sr);
     public abstract void renderSR(ShapeRenderer sr);
     public abstract void tick();
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
 }

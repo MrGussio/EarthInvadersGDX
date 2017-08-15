@@ -34,7 +34,6 @@ public class Meteorite extends Entity {
     public Meteorite(Sprite[] textures, Sprite[] warning, Sound sound) {
         super(0, 0);
         this.sound = sound;
-
         Random r = new Random();
         int direction = r.nextInt(360+1);
         health = r.nextInt(2)+3;
@@ -116,5 +115,9 @@ public class Meteorite extends Entity {
         GameScreen.entities.remove(this);
         if(!Game.musicMuted())
             sound.play(0.6f);
+    }
+
+    public float getHealth(){
+        return health;
     }
 }
