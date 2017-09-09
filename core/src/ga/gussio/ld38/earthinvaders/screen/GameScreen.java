@@ -50,7 +50,7 @@ public class GameScreen extends Screen implements InputListener {
     private BitmapFont scoreFont;
     private Particle[] background;
 
-    private Button leftButton, rightButton, exit, pauseExit, retry, resume, music;
+    private Button leftButton, rightButton, shopButton, exit, pauseExit, retry, resume, music;
     private Player player;
 
     private long spawnTimer;
@@ -66,6 +66,9 @@ public class GameScreen extends Screen implements InputListener {
 
     private boolean paused = false;
     private boolean showedAds = false;
+
+    private boolean shopOpened = false;
+    private boolean shopButtonUsed = false;
 
     public GameScreen() {
         entities.clear();
@@ -98,9 +101,11 @@ public class GameScreen extends Screen implements InputListener {
 
         leftButton = new Button(10, 10, 180, "buttons/control_button.png");
         rightButton = new Button(210, 10, "buttons/control_button.png");
+        shopButton = new Button(1500, 10, "buttons/shop_button.png");
 
         leftButton.setScale(1.5f);
         rightButton.setScale(1.5f);
+        shopButton.setScale(1.5f);
 
         exit = new Button(1230, 450, "buttons/exit.png");
         pauseExit = new Button(1230, 450, "buttons/exit.png");
@@ -147,16 +152,22 @@ public class GameScreen extends Screen implements InputListener {
         }
         leftButton.renderSR(sr);
         rightButton.renderSR(sr);
-
         //HUD
+        sr.set(ShapeRenderer.ShapeType.Filled);
         sr.setColor(Color.GRAY);
         sr.rect(10-3, Game.HEIGHT-10-50-3, 300+6, 50+6);
         sr.setColor(Color.RED);
         sr.rect(10, Game.HEIGHT-10-50, 300, 50);
         sr.setColor(Color.GREEN);
         sr.rect(10, Game.HEIGHT-10-50, 300*(float)(health/maxHealth), 50);
-        sr.end();
 
+        //SHOP MENU
+        if(shopOpened) {
+            sr.setColor(Color.GRAY);
+            sr.rect(Game.WIDTH - Game.WIDTH / 8, 0, Game.WIDTH / 8, Game.HEIGHT);
+        }
+
+        sr.end();
 
         //SPRITEBATCH RENDERING
         sb.begin();
@@ -167,6 +178,7 @@ public class GameScreen extends Screen implements InputListener {
 
         leftButton.renderSB(sb);
         rightButton.renderSB(sb);
+        shopButton.renderSB(sb);
 
         scoreFont.draw(sb, "Score: "+score, 360, Game.HEIGHT-10);
         sb.end();
@@ -226,6 +238,18 @@ public class GameScreen extends Screen implements InputListener {
                 if (dmgAnimation > 0) {
                     health--;
                     dmgAnimation--;
+                }
+
+                if(shopButton.clicked &! shopButtonUsed){
+                    if(shopOpened)
+                        shopOpened = false;
+                    else
+                        shopOpened = true;
+                    shopButtonUsed = true;
+                }
+
+                if(shopButton.released){
+                    shopButtonUsed = false;
                 }
 
                 if (System.currentTimeMillis() > spawnTimer) {
@@ -347,6 +371,7 @@ public class GameScreen extends Screen implements InputListener {
             pointers.put(pointer, 2);
         else
             pointers.put(pointer, 0);
+        shopButton.click(new Vector2(coords.x, coords.y));
         if(health <= 0) {
             retry.click(new Vector2(coords.x, coords.y));
             exit.click(new Vector2(coords.x, coords.y));
@@ -374,6 +399,7 @@ public class GameScreen extends Screen implements InputListener {
             }
             pointers.remove(pointer);
         }
+        shopButton.release(new Vector2(coords.x, coords.y));
         if(health <= 0) {
             retry.release(new Vector2(coords.x, coords.y));
             exit.release(new Vector2(coords.x, coords.y));
@@ -409,6 +435,7 @@ public class GameScreen extends Screen implements InputListener {
                     rightButton.clicked = false;
             }
         }
+        shopButton.drag(new Vector2(coords.x, coords.y));
         if (health <= 0) {
             retry.drag(new Vector2(coords.x, coords.y));
             exit.drag(new Vector2(coords.x, coords.y));
