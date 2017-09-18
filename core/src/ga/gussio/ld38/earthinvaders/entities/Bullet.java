@@ -1,6 +1,5 @@
 package ga.gussio.ld38.earthinvaders.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -20,8 +19,8 @@ public class Bullet extends Entity {
         velY = (speed) * Math.cos(angle);
         velX = (speed) * Math.sin(angle);
 
-        double ticksLeft = (GameScreen.earth.getRadius()+25)/speed; //radius of earth + player size
-        while(ticksLeft > 0){
+        double ticksLeft = (GameScreen.earth.getRadius() + 25) / speed; //radius of earth + player size
+        while (ticksLeft > 0) {
             tick();
             ticksLeft--;
         }
@@ -33,7 +32,7 @@ public class Bullet extends Entity {
     }
 
     @Override
-    public void renderSR(ShapeRenderer sr){
+    public void renderSR(ShapeRenderer sr) {
         sr.set(ShapeRenderer.ShapeType.Filled);
         sr.setColor(Color.RED);
         sr.rect(x, y, 5, 5);
@@ -45,7 +44,7 @@ public class Bullet extends Entity {
         y += velY;
         checkCollision();
         lifetime--;
-        if(lifetime < 0){
+        if (lifetime < 0) {
             GameScreen.entities.remove(this);
         }
     }
@@ -55,8 +54,8 @@ public class Bullet extends Entity {
 
     }
 
-    public void checkCollision(){
-        for(Entity e : GameScreen.entities) {
+    public void checkCollision() {
+        for (Entity e : GameScreen.entities) {
             if (e instanceof Meteorite) {
                 Meteorite m = (Meteorite) e;
                 double dx = Math.abs(x - m.collision.getXCenter());

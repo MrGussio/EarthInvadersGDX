@@ -8,7 +8,7 @@ public class ShopEntry {
     private int cost;
     private Sprite texture;
 
-    public ShopEntry(String title, int cost, Sprite texture){
+    public ShopEntry(String title, int cost, Sprite texture) {
         this.title = title;
         this.cost = cost;
         this.texture = texture;

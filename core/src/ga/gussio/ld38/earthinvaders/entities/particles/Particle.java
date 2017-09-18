@@ -16,8 +16,8 @@ public class Particle extends Entity {
 
     public Particle(float x, float y, int dir, int speed, long timeInMilliseconds, Color color, int size) {
         super(x, y);
-        expireTime = System.currentTimeMillis()+timeInMilliseconds;
-        if(timeInMilliseconds < 0)
+        expireTime = System.currentTimeMillis() + timeInMilliseconds;
+        if (timeInMilliseconds < 0)
             expireTime = -1;
 
         this.color = color;
@@ -27,7 +27,7 @@ public class Particle extends Entity {
     }
 
     @Override
-    public void renderSB(SpriteBatch sb){
+    public void renderSB(SpriteBatch sb) {
 
     }
 
@@ -49,8 +49,8 @@ public class Particle extends Entity {
 
     }
 
-    public boolean hasExpired(){
-        if(expireTime < 0)
+    public boolean hasExpired() {
+        if (expireTime < 0)
             return false;
 
         return System.currentTimeMillis() > expireTime;

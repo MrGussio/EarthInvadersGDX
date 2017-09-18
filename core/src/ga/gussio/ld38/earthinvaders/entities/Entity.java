@@ -7,14 +7,17 @@ public abstract class Entity {
 
     protected float x, y;
 
-    public Entity(float x, float y){
+    public Entity(float x, float y) {
         this.x = x;
         this.y = y;
     }
 
     public abstract void renderSB(SpriteBatch sr);
+
     public abstract void renderSR(ShapeRenderer sr);
+
     public abstract void tick();
+
     public abstract void dispose();
 
     public float getX() {

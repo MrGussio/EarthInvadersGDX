@@ -11,32 +11,32 @@ import ga.gussio.ld38.earthinvaders.Game;
 public class ShopWindow {
 
     private ArrayList<ShopEntry> shopEntries;
-    private int shopWidth = Game.WIDTH/8;
+    private int shopWidth = Game.WIDTH / 8;
     private boolean opened = false;
 
     public ShopWindow() {
         shopEntries = new ArrayList<ShopEntry>();
     }
 
-    public void renderSB(SpriteBatch sb){
+    public void renderSB(SpriteBatch sb) {
 
     }
 
-    public void renderSR(ShapeRenderer sr){
-        if(opened){
+    public void renderSR(ShapeRenderer sr) {
+        if (opened) {
             sr.setColor(Color.GRAY);
             sr.rect(Game.WIDTH - shopWidth, 0, shopWidth, Game.HEIGHT);
         }
     }
 
-    public void toggle(){
-        if(opened)
+    public void toggle() {
+        if (opened)
             opened = false;
         else
             opened = true;
     }
 
-    public boolean isOpened(){
+    public boolean isOpened() {
         return opened;
     }
 

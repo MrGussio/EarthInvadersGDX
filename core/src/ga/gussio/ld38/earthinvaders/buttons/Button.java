@@ -22,7 +22,7 @@ public class Button {
         this.y = y;
         this.filepath = filepath;
         img = filepath != "" ? new Sprite(new Texture(Gdx.files.internal(filepath))) : null;
-        if(img != null) {
+        if (img != null) {
             this.width = img.getTexture().getWidth();
             this.height = img.getTexture().getHeight();
         }
@@ -36,7 +36,7 @@ public class Button {
         this.height = height;
     }
 
-    public Button(int x, int y, Sprite sprite){
+    public Button(int x, int y, Sprite sprite) {
         this(x, y, "");
         img = sprite;
         this.width = img.getTexture().getWidth();
@@ -49,16 +49,16 @@ public class Button {
         this.rotation = rotationInDegr;
     }
 
-    public Button(int x, int y, int rotationInDegr, String filepath){
+    public Button(int x, int y, int rotationInDegr, String filepath) {
         this(x, y, filepath);
         this.rotation = rotationInDegr;
     }
 
     public void renderSB(SpriteBatch sb) {
-        sb.draw(img, x, y, width/2, height/2, width, height, 1.0f, 1.0f, rotation);
+        sb.draw(img, x, y, width / 2, height / 2, width, height, 1.0f, 1.0f, rotation);
     }
 
-    public void renderSR(ShapeRenderer sr){
+    public void renderSR(ShapeRenderer sr) {
 
     }
 
@@ -97,11 +97,11 @@ public class Button {
         collision.set(x, y, width, height);
     }
 
-    public int getRotation(){
+    public int getRotation() {
         return rotation;
     }
 
-    public void setRotation(int rotation){
+    public void setRotation(int rotation) {
         this.rotation = rotation;
     }
 
@@ -117,7 +117,7 @@ public class Button {
         return filepath;
     }
 
-    public Sprite getSprite(){
+    public Sprite getSprite() {
         return img;
     }
 
@@ -136,8 +136,8 @@ public class Button {
         return false;
     }
 
-    public boolean release(Vector2 p){
-        if(collision.contains((p))){
+    public boolean release(Vector2 p) {
+        if (collision.contains((p))) {
             this.clicked = false;
             this.released = true;
             return true;
@@ -145,9 +145,9 @@ public class Button {
         return false;
     }
 
-    public boolean drag(Vector2 p){
-        if(collision.contains(p)){
-            this.clicked=true;
+    public boolean drag(Vector2 p) {
+        if (collision.contains(p)) {
+            this.clicked = true;
             return true;
         }
         return false;

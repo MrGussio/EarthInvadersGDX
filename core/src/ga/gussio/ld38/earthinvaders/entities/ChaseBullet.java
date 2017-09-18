@@ -34,14 +34,14 @@ public class ChaseBullet extends Bullet {
         x += velX;
         y += velY;
         checkCollision();
-        if(target != null && target.getHealth() <= 0)
+        if (target != null && target.getHealth() <= 0)
             GameScreen.entities.remove(this);
     }
 
-    private void calculateVelocity(){
-        if(target != null) {
+    private void calculateVelocity() {
+        if (target != null) {
             dx = target.collision.getXCenter() - x;
-            dy = target.collision.getYCenter()   - y;
+            dy = target.collision.getYCenter() - y;
             double distance = Math.sqrt((dx * dx) + (dy * dy));
             double speed = 2 / distance;
             velX = speed * dx;

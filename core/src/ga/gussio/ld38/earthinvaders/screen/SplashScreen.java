@@ -17,11 +17,11 @@ public class SplashScreen extends Screen {
     private long initiateTime;
     private GameScreen newGameScreen;
 
-    public SplashScreen(){
+    public SplashScreen() {
         camera = new OrthographicCamera();
         viewport = new FitViewport(Game.WIDTH, Game.HEIGHT, camera);
         viewport.apply();
-        camera.position.set(Game.WIDTH/2, Game.HEIGHT/2, 0);
+        camera.position.set(Game.WIDTH / 2, Game.HEIGHT / 2, 0);
         camera.update();
         logo = new Sprite(new Texture(Gdx.files.internal("gussio.png")));
         initiateTime = System.currentTimeMillis();
@@ -42,13 +42,13 @@ public class SplashScreen extends Screen {
 
         //LOGO
         sb.begin();
-        sb.draw(logo, Game.WIDTH/2-logo.getWidth()*20/2, Game.HEIGHT/2-logo.getHeight()*20/2, logo.getWidth()*20, logo.getHeight()*20);
+        sb.draw(logo, Game.WIDTH / 2 - logo.getWidth() * 20 / 2, Game.HEIGHT / 2 - logo.getHeight() * 20 / 2, logo.getWidth() * 20, logo.getHeight() * 20);
         sb.end();
     }
 
     @Override
     public void tick() {
-        if(initiateTime+3000 <= System.currentTimeMillis()){
+        if (initiateTime + 3000 <= System.currentTimeMillis()) {
             Game.setCurrentScreen(new MenuScreen());
         }
     }

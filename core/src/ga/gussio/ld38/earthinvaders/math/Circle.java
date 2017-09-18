@@ -6,7 +6,7 @@ public class Circle {
     private float x;
     private float y;
 
-    public Circle(float x, float y, float radius){
+    public Circle(float x, float y, float radius) {
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -36,15 +36,15 @@ public class Circle {
         this.y = y;
     }
 
-    public float getXCenter(){
-        return x+radius;
+    public float getXCenter() {
+        return x + radius;
     }
 
-    public float getYCenter(){
-        return y+radius;
+    public float getYCenter() {
+        return y + radius;
     }
 
-    public boolean hasCollision(Circle circle){
+    public boolean hasCollision(Circle circle) {
         double xDiff = getXCenter() - circle.getXCenter();
         double yDiff = getYCenter() - circle.getYCenter();
 
