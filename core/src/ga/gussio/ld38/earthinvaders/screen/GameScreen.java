@@ -33,6 +33,7 @@ import ga.gussio.ld38.earthinvaders.entities.Player;
 import ga.gussio.ld38.earthinvaders.entities.Sentry;
 import ga.gussio.ld38.earthinvaders.entities.particles.Particle;
 import ga.gussio.ld38.earthinvaders.math.Circle;
+import ga.gussio.ld38.earthinvaders.shop.ShopWindow;
 
 public class GameScreen extends Screen implements InputListener {
 
@@ -67,8 +68,8 @@ public class GameScreen extends Screen implements InputListener {
     private boolean paused = false;
     private boolean showedAds = false;
 
-    private boolean shopOpened = false;
     private boolean shopButtonUsed = false;
+    private ShopWindow shopWindow;
 
     public GameScreen() {
         entities.clear();
@@ -116,10 +117,11 @@ public class GameScreen extends Screen implements InputListener {
 
         soundtrack = Gdx.audio.newMusic(Gdx.files.internal("sound/soundtrack.wav"));
         meteorDestroySound = Gdx.audio.newSound(Gdx.files.internal("sound/explosion.wav"));
-
         soundtrack.setLooping(true);
         if(!Game.musicMuted())
             soundtrack.play();
+
+        shopWindow = new ShopWindow();
         //generating randomized background
         Random r = new Random();
         background = new Particle[r.nextInt(55-45)+45];
@@ -161,11 +163,7 @@ public class GameScreen extends Screen implements InputListener {
         sr.setColor(Color.GREEN);
         sr.rect(10, Game.HEIGHT-10-50, 300*(float)(health/maxHealth), 50);
 
-        //SHOP MENU
-        if(shopOpened) {
-            sr.setColor(Color.GRAY);
-            sr.rect(Game.WIDTH - Game.WIDTH / 8, 0, Game.WIDTH / 8, Game.HEIGHT);
-        }
+        shopWindow.renderSR(sr);
 
         sr.end();
 
@@ -181,6 +179,7 @@ public class GameScreen extends Screen implements InputListener {
         shopButton.renderSB(sb);
 
         scoreFont.draw(sb, "Score: "+score, 360, Game.HEIGHT-10);
+        shopWindow.renderSB(sb);
         sb.end();
 
         if(health <= 0){
@@ -241,10 +240,7 @@ public class GameScreen extends Screen implements InputListener {
                 }
 
                 if(shopButton.clicked &! shopButtonUsed){
-                    if(shopOpened)
-                        shopOpened = false;
-                    else
-                        shopOpened = true;
+                    shopWindow.toggle();
                     shopButtonUsed = true;
                 }
 
