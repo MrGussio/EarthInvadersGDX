@@ -16,7 +16,7 @@ import ga.gussio.ld38.earthinvaders.screen.GameScreen;
 public class Sentry extends Entity {
 
     private Sprite img;
-    private int size = 50;
+    private int size = 25;
     private float angle = (float) Math.toRadians(90);
     private float viewAngle = 60;
     private float radius = GameScreen.earth.getRadius() + size / 2 - 3;
@@ -25,7 +25,7 @@ public class Sentry extends Entity {
     private int fireRate = 2000; //fire rate in milliseconds
     private long lastFire = 0; //timestamp of last fire in milliseconds
 
-    public Sentry() {
+    public Sentry(float angle) {
         super(0, 0);
         this.x = (float) (GameScreen.earth.getXCenter() + radius * Math.sin(angle));
         this.y = (float) (GameScreen.earth.getYCenter() + radius * Math.cos(angle));
@@ -33,6 +33,7 @@ public class Sentry extends Entity {
         int minDistance = 1080;
         float opposite = (float) Math.tan(viewAngle) * minDistance;
         view = new Polygon(new float[]{x, y, x - opposite, y + minDistance, x + opposite, y + minDistance});
+        this.angle = angle;
     }
 
     @Override
@@ -42,8 +43,8 @@ public class Sentry extends Entity {
 
     @Override
     public void renderSR(ShapeRenderer sr) {
-        sr.setColor(Color.RED);
-        sr.polygon(view.getTransformedVertices());
+        sr.setColor(Color.GRAY);
+//        sr.polygon(view.getTransformedVertices());
     }
 
     @Override

@@ -84,4 +84,8 @@ public class Player extends Entity {
             Gdx.app.error("EarthInvaders", "Error: Invalid Direction [" + dir + "]");
     }
 
+    public float getAngle(){
+        return angle;
+    }
+
 }

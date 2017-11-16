@@ -56,6 +56,7 @@ public class GameScreen extends Screen implements InputListener {
     private int spawnFactor = 6000;
 
     private static int score = 0;
+    private static int money = 0;
     private int scoreTimer = 0;
     private boolean appliedScore = false;
 
@@ -82,7 +83,7 @@ public class GameScreen extends Screen implements InputListener {
         earth = new Circle((float) (Game.WIDTH / 2 - Game.HEIGHT * 0.2), (float) (Game.HEIGHT / 2 - Game.HEIGHT * 0.2), (float) (Game.HEIGHT * 0.2));
         this.player = new Player();
         entities.add(player);
-        entities.add(new Sentry());
+//        entities.add(new Sentry());
         Texture full = new Texture(Gdx.files.internal("meteorite.png"));
         meteoriteSprites = new Sprite[4];
         for (int i = 0; i < meteoriteSprites.length; i++) {
@@ -94,12 +95,14 @@ public class GameScreen extends Screen implements InputListener {
         warningSprites[0] = new Sprite(new TextureRegion(full2, 0, 0, 9, 9));
         warningSprites[1] = new Sprite(new TextureRegion(full2, 9, 0, 9, 9));
 
+        shopWindow = new ShopWindow();
+
         scoreFont = new BitmapFont(Gdx.files.internal("score.fnt"), Gdx.files.internal("score.png"), false);
         scoreFont.getData().setScale(0.8f);
 
         leftButton = new Button(10, 10, 180, "buttons/control_button.png");
         rightButton = new Button(210, 10, "buttons/control_button.png");
-        shopButton = new Button(1500, 10, "buttons/shop_button.png");
+        shopButton = new Button(Game.WIDTH - shopWindow.getShopWidth() - 190, 10, "buttons/shop_button.png");
 
         leftButton.setScale(1.5f);
         rightButton.setScale(1.5f);
@@ -117,8 +120,6 @@ public class GameScreen extends Screen implements InputListener {
         soundtrack.setLooping(true);
         if (!Game.musicMuted())
             soundtrack.play();
-
-        shopWindow = new ShopWindow();
         //generating randomized background
         Random r = new Random();
         background = new Particle[r.nextInt(55 - 45) + 45];
@@ -160,8 +161,6 @@ public class GameScreen extends Screen implements InputListener {
         sr.setColor(Color.GREEN);
         sr.rect(10, Game.HEIGHT - 10 - 50, 300 * (float) (health / maxHealth), 50);
 
-        shopWindow.renderSR(sr);
-
         sr.end();
 
         //SPRITEBATCH RENDERING
@@ -175,8 +174,7 @@ public class GameScreen extends Screen implements InputListener {
         rightButton.renderSB(sb);
         shopButton.renderSB(sb);
 
-        scoreFont.draw(sb, "Score: " + score, 360, Game.HEIGHT - 10);
-        shopWindow.renderSB(sb);
+        scoreFont.draw(sb, "Gold: " + money + " Score: "+score, 360, Game.HEIGHT - 10);
         sb.end();
 
         if (health <= 0) {
@@ -216,6 +214,16 @@ public class GameScreen extends Screen implements InputListener {
             music.renderSB(sb);
             sb.end();
         }
+
+        if(shopWindow.isOpened()){
+            sr.begin();
+            sr.set(ShapeRenderer.ShapeType.Filled);
+            shopWindow.renderSR(sr);
+            sr.end();
+            sb.begin();
+            shopWindow.renderSB(sb);
+            sb.end();
+        }
     }
 
     @Override
@@ -253,7 +261,8 @@ public class GameScreen extends Screen implements InputListener {
                     }
                     spawnTimer = System.currentTimeMillis() + spawnFactor;
                 }
-
+                shopWindow.tick();
+                shopButton.setLocation(shopWindow.isOpened() ? Game.WIDTH - shopWindow.getShopWidth() - shopButton.getWidth()-15 : Game.WIDTH-10-shopButton.getWidth()-10, 10);
                 scoreTimer++;
                 if (scoreTimer > 60) {
                     score++;
@@ -263,6 +272,8 @@ public class GameScreen extends Screen implements InputListener {
                 if (!appliedScore) {
                     Game.checkHighscore(score);
                     appliedScore = true;
+                    if(shopWindow.isOpened())
+                        shopWindow.toggle();
                 }
                 retry.tick();
                 exit.tick();
@@ -347,6 +358,7 @@ public class GameScreen extends Screen implements InputListener {
 
     public static void addScore(int score) {
         GameScreen.score += score;
+        money += score;
     }
 
     @Override
@@ -357,13 +369,13 @@ public class GameScreen extends Screen implements InputListener {
         if (!left & !right & !paused) {//didnt hit a button and game not paused
             player.shoot();
         }
-        System.out.println(pointer);
         if (left)
             pointers.put(pointer, 1);
         else if (right)
             pointers.put(pointer, 2);
         else
             pointers.put(pointer, 0);
+
         shopButton.click(new Vector2(coords.x, coords.y));
         if (health <= 0) {
             retry.click(new Vector2(coords.x, coords.y));
@@ -373,6 +385,9 @@ public class GameScreen extends Screen implements InputListener {
             pauseExit.click(new Vector2(coords.x, coords.y));
             resume.click(new Vector2(coords.x, coords.y));
             music.click(new Vector2(coords.x, coords.y));
+        }
+        if(shopWindow.isOpened()){
+            shopWindow.click(new Vector2(coords.x, coords.y));
         }
     }
 
@@ -401,6 +416,9 @@ public class GameScreen extends Screen implements InputListener {
             pauseExit.release(new Vector2(coords.x, coords.y));
             resume.release(new Vector2(coords.x, coords.y));
             music.release(new Vector2(coords.x, coords.y));
+        }
+        if(shopWindow.isOpened()){
+            shopWindow.release(new Vector2(coords.x, coords.y));
         }
     }
 
@@ -437,6 +455,23 @@ public class GameScreen extends Screen implements InputListener {
             pauseExit.drag(new Vector2(coords.x, coords.y));
             resume.drag(new Vector2(coords.x, coords.y));
             music.drag(new Vector2(coords.x, coords.y));
+        }
+    }
+
+   public static void addMoney(int amount){
+        money += amount;
+   }
+
+    public static int getMoney(){
+        return money;
+    }
+
+    public static void spawnNewSentry(){
+        for(Entity e : entities){
+            if(e instanceof Player){
+                Player p = (Player) e;
+                entities.add(new Sentry(p.getAngle()));
+            }
         }
     }
 }

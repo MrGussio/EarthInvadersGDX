@@ -86,6 +86,21 @@ public class Button {
         this.y = y;
     }
 
+    public void setLocation(int x, int y){
+        this.x = x;
+        this.y = y;
+        this.collision.setX(x);
+        this.collision.setY(y);
+    }
+
+    public void setLocation(int x, int y, int width, int height){
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.collision.set(x, y, width, height);
+    }
+
     public float getScale() {
         return scale;
     }
